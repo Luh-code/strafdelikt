@@ -1,0 +1,63 @@
+[gd_scene load_steps=10 format=3 uid="uid://cj1cyskrj6ktx"]
+
+[ext_resource type="Texture2D" uid="uid://chu8r88b2d8qh" path="res://addons/kenney_prototype_textures/light/texture_12.png" id="1_37kl0"]
+[ext_resource type="Texture2D" uid="uid://cyjocaakkgefb" path="res://addons/kenney_prototype_textures/orange/texture_01.png" id="2_8uh7m"]
+[ext_resource type="PackedScene" uid="uid://cw1fd5xafowgq" path="res://entities/player.tscn" id="3_6uqi0"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8uh7m"]
+albedo_texture = ExtResource("1_37kl0")
+uv1_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6uqi0"]
+albedo_texture = ExtResource("2_8uh7m")
+uv1_triplanar = true
+
+[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_6uqi0"]
+rayleigh_coefficient = 1.6
+mie_coefficient = 0.05
+turbidity = 5.5
+ground_color = Color(0.180445, 0.135022, 0.0802137, 1)
+energy_multiplier = 3.47
+
+[sub_resource type="Sky" id="Sky_ppyta"]
+sky_material = SubResource("PhysicalSkyMaterial_6uqi0")
+
+[sub_resource type="Environment" id="Environment_ykrsh"]
+background_mode = 2
+sky = SubResource("Sky_ppyta")
+ambient_light_source = 3
+reflected_light_source = 2
+tonemap_mode = 3
+ssr_enabled = true
+ssao_enabled = true
+ssil_enabled = true
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.095
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_6uqi0"]
+dof_blur_far_enabled = true
+dof_blur_far_distance = 317.55
+dof_blur_near_enabled = true
+dof_blur_near_distance = 0.15
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Node3D" type="Node3D" parent="."]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Node3D"]
+material_override = SubResource("StandardMaterial3D_8uh7m")
+size = Vector3(33, 1, 33)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 2, 0)
+material_override = SubResource("StandardMaterial3D_6uqi0")
+size = Vector3(1, 3, 5)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ykrsh")
+camera_attributes = SubResource("CameraAttributesPractical_6uqi0")
+
+[node name="Player" parent="." instance=ExtResource("3_6uqi0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 3)
+
+[editable path="Player"]
