@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://cw1fd5xafowgq"]
+
+[ext_resource type="Script" uid="uid://crj6pkmwenl78" path="res://entities/scripts/player/Player.cs" id="1_abrql"]
+[ext_resource type="PackedScene" uid="uid://8lyp1s71wcu2" path="res://entities/player/player_camera.tscn" id="2_sglur"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_u3f3p"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_abrql"]
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_abrql")
+Speed = 8.0
+JumpVelocity = 12.0
+rotationSpeed = 6.0
+wasdControlEnabled = false
+
+[node name="PlayerModel" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_u3f3p")
+
+[node name="PlayerCamera" parent="." instance=ExtResource("2_sglur")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.01824, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_abrql")

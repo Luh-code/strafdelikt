@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://8lyp1s71wcu2"]
+
+[ext_resource type="Script" uid="uid://7efjxy84irbm" path="res://entities/scripts/player/PlayerCamera.cs" id="1_lky0s"]
+[ext_resource type="Environment" uid="uid://cjb1d4048n0jv" path="res://environments/test.tres" id="2_dnosu"]
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_kwuc6"]
+dof_blur_far_enabled = true
+dof_blur_far_distance = 29.47
+dof_blur_near_enabled = true
+dof_blur_near_distance = 1.8
+dof_blur_near_transition = 2.31
+
+[node name="PlayerCamera" type="Node3D" node_paths=PackedStringArray("camera")]
+script = ExtResource("1_lky0s")
+camera = NodePath("Camera3D")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+environment = ExtResource("2_dnosu")
+attributes = SubResource("CameraAttributesPractical_kwuc6")
+current = true
+fov = 90.0
