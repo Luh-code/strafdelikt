@@ -3,10 +3,19 @@ using System;
 
 public partial class Player : CharacterBody3D
 {
-	[Export] public float Speed = 5.0f;
-	[Export] public float JumpVelocity = 8f;
-	[Export] public float rotationSpeed = 5f;
-	[Export] bool wasdControlEnabled = true;
+	[Export] public float Speed = 8.0f;
+	[Export] public float SprintSpeed = 15.0f;
+	[Export] public float JumpVelocity = 10f;
+	[Export] public float rotationSpeed = 6f;
+	[Export] public float AccelSpeed = 2.0f;
+	[Export] public float DecelSpeed = 4.0f;
+	[Export] public Curve AccelCurve;
+	[Export] public Curve DecelCurve;
+	[Export] public Curve LateralDampening;
+	//[Export] public Curve AccelJerk;
+	//[Export] public float AccelTime = 2.0f;
+	//[Export] public Curve DecelJerk;
+	//[Export] public float DecelTime = 1.0f;
 
 	Node3D playerModel;
 	PlayerCamera firstPersonCamera;
@@ -14,6 +23,11 @@ public partial class Player : CharacterBody3D
 	Vector2 inputDirection = Vector2.Zero;
 	Vector3 movementDirection = Vector3.Zero;
 	Vector3 smoothedDirection = Vector3.Zero;
+	//Vector3 acceleration = Vector3.Zero;
+	bool isAccelerating = false;
+	bool isDecelerating = false;
+	long accelTime = 0;
+	long decelTime = 0;
 
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
 	public float gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle() * 2.5f;
@@ -34,21 +48,34 @@ public partial class Player : CharacterBody3D
 	public override void _PhysicsProcess(double delta)
 	{
 		GetInput();
-		Move();
+		Move(delta);
 		Rotate();
 	}
 
 	private void GetInput()
 	{
 		// Get inputs
-		if(Input.GetVector("move_left", "move_right", "move_forward", "move_back").LengthSquared() > 0)
+		Vector2 inputVector = Input.GetVector("move_left", "move_right", "move_forward", "move_back");
+		
+		if(inputVector.Y != 0 && !isAccelerating)
 		{
-			inputDirection = Input.GetVector("move_left", "move_right", "move_forward", "move_back");
+			isAccelerating = true;
+			isDecelerating = false;
+			accelTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
 		}
-		else if(wasdControlEnabled && (Input.IsPhysicalKeyPressed(Key.W) || Input.IsPhysicalKeyPressed(Key.A) || Input.IsPhysicalKeyPressed(Key.S) || Input.IsPhysicalKeyPressed(Key.D)))
+		else if(inputVector.Y == 0 && isAccelerating)
 		{
-			inputDirection = new Vector2(Convert.ToInt32(Input.IsPhysicalKeyPressed(Key.D)) - Convert.ToInt32(Input.IsPhysicalKeyPressed(Key.A)),
-			Convert.ToInt32(Input.IsPhysicalKeyPressed(Key.S)) - Convert.ToInt32(Input.IsPhysicalKeyPressed(Key.W)));
+			isAccelerating = false;
+			isDecelerating = true;
+			decelTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+			//long currentTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+			//float jerkProgress = Mathf.Min((currentTime-accelTime)/1000.0f, 1.0f);
+			//decelTime = 
+		}
+		
+		if(inputVector.LengthSquared() > 0)
+		{
+			inputDirection = inputVector;
 		}
 		else
 		{
@@ -60,7 +87,7 @@ public partial class Player : CharacterBody3D
 		}
 	}
 
-	private void Move()
+	private void Move(double delta)
 	{
 		Vector3 velocity = Velocity;
 
@@ -83,17 +110,86 @@ public partial class Player : CharacterBody3D
 		smoothedDirection = smoothedDirection.Lerp(movementDirection, 18f * (float)GetPhysicsProcessDeltaTime());
 
 		// Apply movement
-		if (smoothedDirection != Vector3.Zero)
+		long currentTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+		float accelProgress = Mathf.Min((currentTime-accelTime)/1000.0f, 1.0f);
+		float decelProgress = Mathf.Min((currentTime-decelTime)/1000.0f, 1.0f);
+		
+		//if (isAccelerating)
+		//{
+		//	if (jerkProgress == 1.0f)
+		//	{
+		//		acceleration = Vector3.Zero;
+		//	}
+		//	acceleration.X += smoothedDirection.X * AccelJerk.Sample(jerkProgress) * (float) delta;
+		//	acceleration.Z += smoothedDirection.Z * AccelJerk.Sample(jerkProgress) * (float) delta;
+		//}
+		//else if (isDecelerating)
+		//{
+		//	Vector3 accelDirection = acceleration.Normalized();
+		//	acceleration.X -= accelDirection.X * DecelJerk.Sample(1.0f-jerkProgress) * (float) delta;
+		//	acceleration.Z -= accelDirection.Z * DecelJerk.Sample(1.0f-jerkProgress) * (float) delta;
+		//	if (jerkProgress == 1.0f)
+		//	{
+		//		acceleration = Vector3.Zero;
+		//	}
+		//}
+		
+		//velocity += acceleration * new Vector3((float)delta, (float)delta, (float)delta);
+		//vGD.Print(acceleration);
+		
+		Vector3 velocityXZ = new Vector3(velocity.X, 0, velocity.Z);
+		
+		// Calculate deceleration force
+		float decelStrength = DecelCurve.SampleBaked(decelProgress);
+		//Vector3 deceleration = velocityXZ.Normalized() * decelStrength * DecelSpeed * (float) delta;
+		float deceleration = decelStrength * DecelSpeed * (float) delta;
+		//if (velocityXZ.Length() - deceleration.Length() < 0)
+		//{
+		//	deceleration = deceleration.Normalized() * (velocityXZ.Length());
+		//}
+		if (velocityXZ.Length() - deceleration < 0)
 		{
-			velocity.X = smoothedDirection.X * Speed;
-			velocity.Z = smoothedDirection.Z * Speed;
+			deceleration = velocityXZ.Length();
+		}
+		
+		float actingSpeed = (Input.IsActionPressed("move_sprint") ? SprintSpeed : Speed);
+		if (movementDirection != Vector3.Zero)// && velocity.Length() < Speed)
+		{
+			// Accelerate
+			float accelStrength = AccelCurve.SampleBaked(accelProgress);
+			Vector3 acceleration = (smoothedDirection * accelStrength * AccelSpeed * (float) delta);
+			if ((velocityXZ + acceleration).Length() > actingSpeed)
+			{
+				acceleration = acceleration.Normalized() * (actingSpeed-velocityXZ.Length());
+			}
+			velocity += acceleration;
+			
+			// Calclate deceleration
+			Vector2 v = new Vector2(velocity.X, velocity.Z).Normalized();
+			Vector2 a = new Vector2(acceleration.X, acceleration.Z).Normalized();
+			float c = Mathf.Abs(1-v.Dot(a)); //Mathf.Min(Mathf.Abs(1-v.Dot(a)), 1.0f);
+			//float c = Mathf.Min(Mathf.Abs(1-v.Dot(a)), 1.0f);
+			GD.Print("v: " + v + " a: " + a + " c: " + c);
+			Vector3 d = (-velocityXZ.Normalized()) * deceleration * c;
+			velocity += d;
+			
+			velocityXZ = new Vector3(velocity.X, 0, velocity.Z);
+			
 		}
 		else
 		{
-			velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
-			velocity.Z = Mathf.MoveToward(Velocity.Z, 0, Speed);
+			velocityXZ = new Vector3(velocity.X, 0, velocity.Z);
+			// Decelerate
+			
+			velocity -= velocityXZ.Normalized() * deceleration;
 		}
+		
+		
+		
 		Velocity = velocity;
+		//GD.Print(velocity.Length());
+		//GD.Print(velocity);
+		
 		MoveAndSlide();
 
 	}

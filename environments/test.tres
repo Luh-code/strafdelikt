@@ -1,19 +1,8 @@
-[gd_resource type="Environment" load_steps=3 format=3 uid="uid://cjb1d4048n0jv"]
-
-[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_6uqi0"]
-mie_coefficient = 0.05
-turbidity = 5.5
-ground_color = Color(0.180445, 0.135022, 0.0802137, 1)
-
-[sub_resource type="Sky" id="Sky_ppyta"]
-sky_material = SubResource("PhysicalSkyMaterial_6uqi0")
+[gd_resource type="Environment" format=3 uid="uid://cjb1d4048n0jv"]
 
 [resource]
-background_mode = 2
-sky = SubResource("Sky_ppyta")
-ambient_light_color = Color(1, 1, 1, 1)
-ambient_light_energy = 8.85
-reflected_light_source = 2
+background_color = Color(0.1836, 0.514533, 0.68, 1)
+background_energy_multiplier = 0.08
 tonemap_mode = 3
 tonemap_exposure = 1.36
 tonemap_white = 0.9

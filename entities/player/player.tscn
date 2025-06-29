@@ -1,18 +1,47 @@
-[gd_scene load_steps=5 format=3 uid="uid://cw1fd5xafowgq"]
+[gd_scene load_steps=13 format=3 uid="uid://cw1fd5xafowgq"]
 
 [ext_resource type="Script" uid="uid://crj6pkmwenl78" path="res://entities/scripts/player/Player.cs" id="1_abrql"]
 [ext_resource type="PackedScene" uid="uid://8lyp1s71wcu2" path="res://entities/player/player_camera.tscn" id="2_sglur"]
+
+[sub_resource type="Curve" id="Curve_abrql"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.752525, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_sglur"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.252525, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_bls4j"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 0.640449), 0.0, 0.0, 0, 0]
+point_count = 1
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_u3f3p"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_abrql"]
 
+[sub_resource type="SphereMesh" id="SphereMesh_abrql"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_sglur"]
+
+[sub_resource type="Gradient" id="Gradient_bls4j"]
+colors = PackedColorArray(0, 0.466667, 1, 1, 1, 0, 0.75, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_fkugw"]
+gradient = SubResource("Gradient_bls4j")
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_abrql"]
+gradient = SubResource("Gradient_bls4j")
+
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_abrql")
-Speed = 8.0
+Speed = 9.0
 JumpVelocity = 12.0
-rotationSpeed = 6.0
-wasdControlEnabled = false
+AccelSpeed = 28.265
+DecelSpeed = 69.87
+AccelCurve = SubResource("Curve_abrql")
+DecelCurve = SubResource("Curve_sglur")
+LateralDampening = SubResource("Curve_bls4j")
 
 [node name="PlayerModel" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -24,3 +53,37 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.01824, 0)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_abrql")
+
+[node name="DebugUI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="DebugUI"]
+anchors_preset = 0
+offset_left = 75.0
+offset_top = 75.0
+offset_right = 345.0
+offset_bottom = 345.0
+
+[node name="MeshInstance2D2" type="MeshInstance2D" parent="DebugUI/Control"]
+position = Vector2(160.344, 162.416)
+scale = Vector2(300, 300)
+mesh = SubResource("SphereMesh_abrql")
+
+[node name="Node2D" type="Node2D" parent="DebugUI/Control"]
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="DebugUI/Control/Node2D"]
+position = Vector2(235.344, 160.016)
+scale = Vector2(150, 7.2)
+mesh = SubResource("QuadMesh_sglur")
+texture = SubResource("GradientTexture1D_fkugw")
+
+[node name="MeshInstance2D2" type="MeshInstance2D" parent="DebugUI/Control/Node2D"]
+position = Vector2(235.344, 160.016)
+scale = Vector2(150, 7.2)
+mesh = SubResource("QuadMesh_sglur")
+texture = SubResource("GradientTexture1D_abrql")
