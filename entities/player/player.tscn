@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cw1fd5xafowgq"]
+[gd_scene load_steps=16 format=3 uid="uid://cw1fd5xafowgq"]
 
 [ext_resource type="Script" uid="uid://crj6pkmwenl78" path="res://entities/scripts/player/Player.cs" id="1_abrql"]
 [ext_resource type="PackedScene" uid="uid://8lyp1s71wcu2" path="res://entities/player/player_camera.tscn" id="2_sglur"]
@@ -25,23 +25,33 @@ point_count = 1
 [sub_resource type="QuadMesh" id="QuadMesh_sglur"]
 
 [sub_resource type="Gradient" id="Gradient_bls4j"]
-colors = PackedColorArray(0, 0.466667, 1, 1, 1, 0, 0.75, 1)
+colors = PackedColorArray(0, 0.466667, 1, 1, 0, 0.774628, 0.242169, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_fkugw"]
 gradient = SubResource("Gradient_bls4j")
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_abrql"]
-gradient = SubResource("Gradient_bls4j")
+[sub_resource type="Gradient" id="Gradient_abrql"]
+colors = PackedColorArray(0, 0.466667, 1, 1, 1, 0.0909423, 0.0594643, 1)
 
-[node name="Player" type="CharacterBody3D"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_sglur"]
+gradient = SubResource("Gradient_abrql")
+
+[sub_resource type="Gradient" id="Gradient_fkugw"]
+colors = PackedColorArray(0.1335, 0.700875, 0.89, 1, 1, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_8fjmc"]
+gradient = SubResource("Gradient_fkugw")
+
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("VArm", "DArm", "AArm")]
 script = ExtResource("1_abrql")
-Speed = 9.0
+Speed = 12.0
 JumpVelocity = 12.0
-AccelSpeed = 28.265
-DecelSpeed = 69.87
 AccelCurve = SubResource("Curve_abrql")
 DecelCurve = SubResource("Curve_sglur")
 LateralDampening = SubResource("Curve_bls4j")
+VArm = NodePath("DebugUI/DirectionClockWidget/Arms/VArm")
+DArm = NodePath("DebugUI/DirectionClockWidget/Arms/DArm")
+AArm = NodePath("DebugUI/DirectionClockWidget/Arms/AArm")
 
 [node name="PlayerModel" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -62,28 +72,43 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Control" type="Control" parent="DebugUI"]
+[node name="DirectionClockWidget" type="Control" parent="DebugUI"]
 anchors_preset = 0
 offset_left = 75.0
 offset_top = 75.0
-offset_right = 345.0
-offset_bottom = 345.0
+offset_right = 385.0
+offset_bottom = 387.0
 
-[node name="MeshInstance2D2" type="MeshInstance2D" parent="DebugUI/Control"]
+[node name="MeshInstance2D2" type="MeshInstance2D" parent="DebugUI/DirectionClockWidget"]
 position = Vector2(160.344, 162.416)
 scale = Vector2(300, 300)
 mesh = SubResource("SphereMesh_abrql")
 
-[node name="Node2D" type="Node2D" parent="DebugUI/Control"]
+[node name="Arms" type="Node2D" parent="DebugUI/DirectionClockWidget"]
 
-[node name="MeshInstance2D" type="MeshInstance2D" parent="DebugUI/Control/Node2D"]
-position = Vector2(235.344, 160.016)
+[node name="VArm" type="Node2D" parent="DebugUI/DirectionClockWidget/Arms"]
+position = Vector2(160, 160)
+
+[node name="VArm" type="MeshInstance2D" parent="DebugUI/DirectionClockWidget/Arms/VArm"]
+position = Vector2(75.3438, 0.015625)
 scale = Vector2(150, 7.2)
 mesh = SubResource("QuadMesh_sglur")
 texture = SubResource("GradientTexture1D_fkugw")
 
-[node name="MeshInstance2D2" type="MeshInstance2D" parent="DebugUI/Control/Node2D"]
-position = Vector2(235.344, 160.016)
+[node name="DArm" type="Node2D" parent="DebugUI/DirectionClockWidget/Arms"]
+position = Vector2(160, 160)
+
+[node name="DArm" type="MeshInstance2D" parent="DebugUI/DirectionClockWidget/Arms/DArm"]
+position = Vector2(75.3438, 0.015625)
 scale = Vector2(150, 7.2)
 mesh = SubResource("QuadMesh_sglur")
-texture = SubResource("GradientTexture1D_abrql")
+texture = SubResource("GradientTexture1D_sglur")
+
+[node name="AArm" type="Node2D" parent="DebugUI/DirectionClockWidget/Arms"]
+position = Vector2(160, 160)
+
+[node name="AArm" type="MeshInstance2D" parent="DebugUI/DirectionClockWidget/Arms/AArm"]
+position = Vector2(75.3438, 0.015625)
+scale = Vector2(150, 7.2)
+mesh = SubResource("QuadMesh_sglur")
+texture = SubResource("GradientTexture1D_8fjmc")

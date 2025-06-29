@@ -12,6 +12,9 @@ public partial class Player : CharacterBody3D
 	[Export] public Curve AccelCurve;
 	[Export] public Curve DecelCurve;
 	[Export] public Curve LateralDampening;
+	[Export] public Node2D VArm;
+	[Export] public Node2D DArm;
+	[Export] public Node2D AArm;
 	//[Export] public Curve AccelJerk;
 	//[Export] public float AccelTime = 2.0f;
 	//[Export] public Curve DecelJerk;
@@ -175,6 +178,15 @@ public partial class Player : CharacterBody3D
 			
 			velocityXZ = new Vector3(velocity.X, 0, velocity.Z);
 			
+			Vector2 right = new Vector2(1, 0);
+			Vector2 dXZ = new Vector2(d.X, d.Z);
+			//VArm.SetRotation((Mathf.Abs(v.Dot(right))/(v.Length()*right.Length()))*4);
+			//DArm.SetRotation((Mathf.Abs(dXZ.Dot(right))/(dXZ.Length()*right.Length()))*4);
+			//AArm.SetRotation((Mathf.Abs(a.Dot(right))/(a.Length()*right.Length()))*6);
+			VArm.SetRotation(MathF.Atan2(v.Y, v.X));
+			DArm.SetRotation(MathF.Atan2(dXZ.Y, dXZ.X));
+			DArm.SetScale(new Vector2(d.Length()/deceleration, DArm.GetScale().Y));
+			AArm.SetRotation(MathF.Atan2(a.Y, a.X));
 		}
 		else
 		{
