@@ -7,16 +7,20 @@ public partial class Player : CharacterBody3D
 	[Export(PropertyHint.Range, "0, 50")] public float Speed = 8.0f;
 	[Export(PropertyHint.Range, "0, 50")] public float SprintSpeed = 15.0f;
 	[Export(PropertyHint.Range, "0, 20")] public float JumpVelocity = 10f;
+	[Export(PropertyHint.Range, "0, 20")] public float JumpSpeedBoost = 4.0f;
 	[Export(PropertyHint.Range, "0, 10")] public float rotationSpeed = 6f;
 	[Export(PropertyHint.Range, "0, 300")] public float AccelSpeed = 2.0f;
 	[Export(PropertyHint.Range, "0, 300")] public float DecelSpeed = 4.0f;
 	[Export(PropertyHint.Range, "0, 300")] public float AirDecelSpeed = 3.0f;
 	[Export(PropertyHint.Range, "1, 10")] public float LateralCofactor = 4.1f;
 	[Export(PropertyHint.Range, "0, 1")] public float LateralCofactor2 = 0.3f;
+	[Export(PropertyHint.Range, "0, 100")] public float DashAcceleration = 48.0f;
 	[Export] public Curve AccelCurve;
 	[Export] public Curve DecelCurve;
 	[Export] public Curve CounterAccelFactor;
 	//[Export] public Curve AirResistanceCofactor;
+	[ExportSubgroup("Nodes")]
+	[Export] public Timer DashTimer; 
 	[ExportSubgroup("HERE BE DRAGONS")]
 	[Export(PropertyHint.Range, "0, 2")] public float DecelerationDirMod = 1.0f;
 	[ExportSubgroup("Debug")]
@@ -24,6 +28,7 @@ public partial class Player : CharacterBody3D
 	[Export] public Node2D VArm;
 	[Export] public Node2D DArm;
 	[Export] public Node2D AArm;
+	[Export] public Node2D MArm;
 	//[Export] public Curve AccelJerk;
 	//[Export] public float AccelTime = 2.0f;
 	//[Export] public Curve DecelJerk;
@@ -40,6 +45,8 @@ public partial class Player : CharacterBody3D
 	bool isDecelerating = false;
 	long accelTime = 0;
 	long decelTime = 0;
+	
+	//bool isDashing = false;
 
 
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -117,12 +124,9 @@ public partial class Player : CharacterBody3D
 		// Add the gravity
 		if (!IsOnFloor()) velocity.Y -= gravity * (float)GetPhysicsProcessDeltaTime();
 
-		// Handle Jump
-		if ((Input.IsPhysicalKeyPressed(Key.Space) || Input.IsJoyButtonPressed(0, JoyButton.A)) && IsOnFloor()) velocity.Y = JumpVelocity;
-
 		// Convert input to movementDirection
 		movementDirection = (Transform.Basis * new Vector3(inputDirection.X, 0, inputDirection.Y)).Normalized();
-
+		
 		// Rotate movement movementDirection towards camera movementDirection
 		if(IsInstanceValid(firstPersonCamera))
 		{
@@ -186,24 +190,35 @@ public partial class Player : CharacterBody3D
 			if ((velocityXZ + acceleration).Length() > actingSpeed)
 			{
 				//acceleration = Vector3.Zero;
-				acceleration = acceleration.Normalized() * (actingSpeed-velocityXZ.Length());
+				if (velocityXZ.Length() > actingSpeed) {
+					acceleration = Vector3.Zero;
+				}
+				else
+				{
+					var aDir = acceleration.Normalized();
+					var aStren = Mathf.Min(Mathf.Max(actingSpeed-velocityXZ.Length(), 0), actingSpeed);//Mathf.Min(Mathf.Abs((actingSpeed-velocityXZ.Length())), actingSpeed);
+					var aAttenuation = Mathf.Min(Mathf.Abs(1-((acceleration.Normalized()).Dot(velocityXZ.Normalized()))), 2.0f);
+					
+					acceleration = aDir * aStren * aAttenuation;
+				}
 			}
 			velocity += acceleration;
 			
 			// Calclate deceleration
 			Vector2 v = new Vector2(velocity.X, velocity.Z).Normalized();
 			Vector2 a = new Vector2(acceleration.X, acceleration.Z).Normalized();
+			if (a == Vector2.Zero) a = new Vector2(smoothedDirection.X, smoothedDirection.Z);
 			//float c = Mathf.Abs(1-v.Dot(a)); //Mathf.Min(Mathf.Abs(1-v.Dot(a)), 1.0f);
 			//float c = Mathf.Min(Mathf.Abs(1-v.Dot(a)), 1.0f);
 			float c = CounterAccelFactor.SampleBaked(1-v.Dot(a));
 			//GD.Print("v: " + v + " a: " + a + " c: " + c);
 			float avAngle = Mathf.Atan2((a.Y*v.X) - (a.X*v.Y), (a.Y*v.Y) + (a.X*v.X));
 			Vector3 d = -(new Vector3(v.X, 0, v.Y).Normalized().Rotated(Vector3.Up, avAngle * DecelerationDirMod)) * deceleration * c * LateralCofactor;
-			d = d * -(Mathf.Pow(velocity.Length(), LateralCofactor2)*new Vector2(d.X, d.Z).Normalized().Dot(v));
+			d = d * (Mathf.Pow(velocity.Length(), LateralCofactor2)*new Vector2(d.X, d.Z).Normalized().Dot(v));
 			//d = d * Mathf.Pow(d.Length(), 0.5f);
 			//d = d.Rotated(Vector3.Up, avAngle);
 			
-			velocity += d;
+			velocity -= d;
 			
 			velocityXZ = new Vector3(velocity.X, 0, velocity.Z);
 			
@@ -220,6 +235,7 @@ public partial class Player : CharacterBody3D
 			DArm.SetRotation(MathF.Atan2(dXZ.Y, dXZ.X));
 			DArm.SetScale(new Vector2(d.Length()/deceleration, DArm.GetScale().Y)*(debugUI.ShowBreakAsForce.ButtonPressed ? -1 : 1));
 			AArm.SetRotation(MathF.Atan2(a.Y, a.X));
+			MArm.SetRotation(MathF.Atan2(smoothedDirection.Z, smoothedDirection.X));
 		}
 		else
 		{
@@ -229,7 +245,64 @@ public partial class Player : CharacterBody3D
 			velocity -= velocityXZ.Normalized() * deceleration;
 		}
 		
+		// Handle Dash
+		if (Input.IsActionJustPressed("move_dash") && DashTimer.TimeLeft == 0.0f)
+		{
+			//if (movementDirection.Length() != 0.0f)
+			//{
+			var dashDirection = smoothedDirection;
+			if (movementDirection.Length() == 0.0f)
+			{
+				dashDirection = new Vector3(0, 0, -1).Rotated(Vector3.Up, firstPersonCamera.Rotation.Y);
+			}
+			GD.Print("dashing in: " + dashDirection);
+			
+			var dashPower = DashAcceleration;// + (actingDecelSpeed/10);
 		
+			var dashVector = dashDirection * dashPower;
+			velocity += dashVector;
+			
+			DashTimer.Start();
+			//}
+			
+		}
+		
+		// Handle Jump
+		if ((Input.IsActionPressed("move_jump") || Input.IsJoyButtonPressed(0, JoyButton.A)) && IsOnFloor())
+		{
+			velocity.Y = JumpVelocity;
+			
+			var boostDirection = smoothedDirection;
+			if (movementDirection.Length() == 0.0f)
+			{
+				boostDirection = Vector3.Zero;
+				//boostDirection = new Vector3(0, 0, -1).Rotated(Vector3.Up, firstPersonCamera.Rotation.Y);
+			}
+			velocity += boostDirection * JumpSpeedBoost;
+		}
+		
+		//if (!DashTimer.IsStopped())
+		//{
+			//var dashDirection = smoothedDirection;
+			//if (movementDirection.Length() == 0.0f)
+			//{
+				//dashDirection = new Vector3(0, 0, -1).Rotated(Vector3.Up, firstPersonCamera.Rotation.Y);
+			//}
+			////GD.Print("dashing in: " + dashDirection);
+			//
+			//var dashPower = DashAcceleration;
+			//
+			//if (IsOnFloor()) {
+				////dashPower 
+			//}
+			//dashPower += actingDecelSpeed/10;
+			//
+			//var dashVector = smoothedDirection * dashPower;
+			//velocity += dashVector;
+		//}
+		
+		//GD.Print(DashTimer.TimeLeft);
+		//GD.Print(movementDirection);
 		
 		Velocity = velocity;
 		//GD.Print(velocity.Length());
