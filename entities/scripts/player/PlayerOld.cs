@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class Player : CharacterBody3D
+public partial class PlayerOld : CharacterBody3D
 {
 	[Export] public float Speed = 8.0f;
 	[Export] public float SprintSpeed = 15.0f;
@@ -12,7 +12,6 @@ public partial class Player : CharacterBody3D
 	[Export] public Curve AccelCurve;
 	[Export] public Curve DecelCurve;
 	[Export] public Curve LateralDampening;
-	[Export] public DebugUi debugUI;
 	[Export] public Node2D VArm;
 	[Export] public Node2D DArm;
 	[Export] public Node2D AArm;
@@ -22,7 +21,7 @@ public partial class Player : CharacterBody3D
 	//[Export] public float DecelTime = 1.0f;
 
 	Node3D playerModel;
-	public PlayerCamera firstPersonCamera;
+	PlayerCamera firstPersonCamera;
 
 	Vector2 inputDirection = Vector2.Zero;
 	Vector3 movementDirection = Vector3.Zero;
@@ -32,7 +31,6 @@ public partial class Player : CharacterBody3D
 	bool isDecelerating = false;
 	long accelTime = 0;
 	long decelTime = 0;
-
 
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
 	public float gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle() * 2.5f;
@@ -89,16 +87,6 @@ public partial class Player : CharacterBody3D
 			
 			if(Mathf.Abs(Input.GetJoyAxis(0, JoyAxis.LeftY)) >= 0.5) inputDirection.Y = Input.GetJoyAxis(0, JoyAxis.LeftY);
 			else inputDirection.Y = 0;
-		}
-		
-		
-	}
-
-	public void _UndhandledInput(InputEvent @event)
-	{
-		if (@event is InputEventKey eventKey)
-		{
-			//if(eventKey)
 		}
 	}
 
@@ -168,7 +156,7 @@ public partial class Player : CharacterBody3D
 		}
 		
 		float actingSpeed = (Input.IsActionPressed("move_sprint") ? SprintSpeed : Speed);
-		if (movementDirection != Vector3.Zero && !firstPersonCamera.debug)// && velocity.Length() < Speed)
+		if (movementDirection != Vector3.Zero)// && velocity.Length() < Speed)
 		{
 			// Accelerate
 			float accelStrength = AccelCurve.SampleBaked(accelProgress);
@@ -197,7 +185,7 @@ public partial class Player : CharacterBody3D
 			//AArm.SetRotation((Mathf.Abs(a.Dot(right))/(a.Length()*right.Length()))*6);
 			VArm.SetRotation(MathF.Atan2(v.Y, v.X));
 			DArm.SetRotation(MathF.Atan2(dXZ.Y, dXZ.X));
-			DArm.SetScale(new Vector2(d.Length()/deceleration, DArm.GetScale().Y)*(debugUI.ShowBreakAsForce.ButtonPressed ? -1 : 1));
+			DArm.SetScale(new Vector2(d.Length()/deceleration, DArm.GetScale().Y));
 			AArm.SetRotation(MathF.Atan2(a.Y, a.X));
 		}
 		else

@@ -13,6 +13,8 @@ public partial class PlayerCamera : Node3D
 
 	Vector2 mouseInput;
 	private Vector2 smoothedControllerInput = Vector2.Zero;
+	
+	public bool debug = false;
 
 	public override void _Ready()
 	{
@@ -42,6 +44,15 @@ public partial class PlayerCamera : Node3D
 			GetTree().Quit();
 		}
 		
+		if (Input.IsActionJustPressed("debug_key"))
+		{
+			if (!debug)
+				DisplayServer.MouseSetMode(DisplayServer.MouseMode.Visible);
+			else
+				DisplayServer.MouseSetMode(DisplayServer.MouseMode.Captured);
+			debug = !debug;
+		}
+		
 		RotateCamera();
 	}
 
@@ -53,7 +64,7 @@ public partial class PlayerCamera : Node3D
 		Vector3 newRotationDegrees = RotationDegrees;
 		Vector3 newCameraRotationDegrees = camera.RotationDegrees;
 
-		if(mouseInput != Vector2.Zero)
+		if(mouseInput != Vector2.Zero && !debug)
 		{
 			newCameraRotationDegrees.X -= mouseInput.Y * mouseSensitivity * (1920 / DisplayServer.WindowGetSize().X * (float)GetPhysicsProcessDeltaTime());
 			newCameraRotationDegrees.X = Mathf.Clamp(newCameraRotationDegrees.X, -80, 80);
@@ -66,7 +77,8 @@ public partial class PlayerCamera : Node3D
 			mouseInput = Vector2.Zero;
 		}
 		Vector2 controllerInput = Vector2.Zero;
-
+		if (!debug)
+		{
 			if(Mathf.Abs(Input.GetJoyAxis(0, JoyAxis.RightX)) >= 0.5) controllerInput.X = -Input.GetJoyAxis(0, JoyAxis.RightX);
 			else controllerInput.X = 0;
 			
@@ -81,6 +93,7 @@ public partial class PlayerCamera : Node3D
 			newRotationDegrees.Y = Mathf.Wrap(newRotationDegrees.Y, 0, 360);
 
 			RotationDegrees = newRotationDegrees;
-			camera.RotationDegrees = newCameraRotationDegrees;
+			camera.RotationDegrees = newCameraRotationDegrees * System.Convert.ToSingle(!debug);
+		}
 	}
 }

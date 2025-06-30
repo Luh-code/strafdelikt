@@ -2,7 +2,7 @@
 
 [resource]
 background_color = Color(0.1836, 0.514533, 0.68, 1)
-background_energy_multiplier = 0.08
+background_energy_multiplier = 0.4
 tonemap_mode = 3
 tonemap_exposure = 1.36
 tonemap_white = 0.9
