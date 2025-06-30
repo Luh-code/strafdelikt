@@ -3,16 +3,18 @@ using System;
 
 public partial class Player : CharacterBody3D
 {
-	[Export] public float Speed = 8.0f;
-	[Export] public float SprintSpeed = 15.0f;
-	[Export] public float JumpVelocity = 10f;
-	[Export] public float rotationSpeed = 6f;
-	[Export] public float AccelSpeed = 2.0f;
-	[Export] public float DecelSpeed = 4.0f;
-	[Export] public float LateralCofactor = 2.5f;
-	[Export] public float LateralCofactor2 = 0.3f;
+	[ExportSubgroup("Main")]
+	[Export(PropertyHint.Range, "0, 50")] public float Speed = 8.0f;
+	[Export(PropertyHint.Range, "0, 50")] public float SprintSpeed = 15.0f;
+	[Export(PropertyHint.Range, "0, 20")] public float JumpVelocity = 10f;
+	[Export(PropertyHint.Range, "0, 10")] public float rotationSpeed = 6f;
+	[Export(PropertyHint.Range, "0, 300")] public float AccelSpeed = 2.0f;
+	[Export(PropertyHint.Range, "0, 300")] public float DecelSpeed = 4.0f;
+	[Export(PropertyHint.Range, "1, 10")] public float LateralCofactor = 2.5f;
+	[Export(PropertyHint.Range, "0, 1")] public float LateralCofactor2 = 0.3f;
 	[Export] public Curve AccelCurve;
 	[Export] public Curve DecelCurve;
+	[ExportSubgroup("Debug")]
 	[Export] public DebugUi debugUI;
 	[Export] public Node2D VArm;
 	[Export] public Node2D DArm;
