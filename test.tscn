@@ -290,6 +290,3 @@ omni_range = 10.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("4_ppyta")
-
-[editable path="Player"]
-[editable path="Player/PlayerCamera"]

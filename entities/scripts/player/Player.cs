@@ -182,10 +182,14 @@ public partial class Player : CharacterBody3D
 			// Calclate deceleration
 			Vector2 v = new Vector2(velocity.X, velocity.Z).Normalized();
 			Vector2 a = new Vector2(acceleration.X, acceleration.Z).Normalized();
-			float c = Mathf.Abs(1-v.Dot(a)); //Mathf.Min(Mathf.Abs(1-v.Dot(a)), 1.0f);
-			//float c = Mathf.Min(Mathf.Abs(1-v.Dot(a)), 1.0f);
+			//float c = Mathf.Abs(1-v.Dot(a)); //Mathf.Min(Mathf.Abs(1-v.Dot(a)), 1.0f);
+			float c = Mathf.Min(Mathf.Abs(1-v.Dot(a)), 1.0f);
 			GD.Print("v: " + v + " a: " + a + " c: " + c);
-			Vector3 d = (-velocityXZ.Normalized()) * deceleration * c;
+			Vector3 d = (-new Vector3(v.X, 0, v.Y).Normalized()) * deceleration * c * 2f;
+			
+			float avAngle = Mathf.Atan2((a.Y*v.X) - (a.X*v.Y), (a.Y*v.Y) + (a.X*v.X));
+			d = d.Rotated(Vector3.Up, avAngle);
+			
 			velocity += d;
 			
 			velocityXZ = new Vector3(velocity.X, 0, velocity.Z);
