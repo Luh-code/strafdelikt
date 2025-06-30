@@ -9,7 +9,7 @@
 
 [sub_resource type="Curve" id="Curve_8fjmc"]
 _limits = [0.0, 2.0, 0.0, 1.0]
-_data = [Vector2(0, 2), 0.0, 0.0, 0, 0, Vector2(0.112088, 1.00664), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 2), 0.0, 0.0, 0, 0, Vector2(0.254945, 1.00664), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_sglur"]
@@ -77,7 +77,7 @@ AccelSpeed = 91.41
 DecelSpeed = 57.765
 AirDecelSpeed = 12.918
 LateralCofactor = 3.005
-DashVelocity = 14.405
+DashVelocity = 34.993
 AccelCurve = SubResource("Curve_8fjmc")
 DecelCurve = SubResource("Curve_sglur")
 CounterAccelFactor = SubResource("Curve_qiwj3")
