@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://cw1fd5xafowgq"]
+[gd_scene load_steps=27 format=3 uid="uid://cw1fd5xafowgq"]
 
 [ext_resource type="Script" uid="uid://crj6pkmwenl78" path="res://entities/scripts/player/Player.cs" id="1_abrql"]
 [ext_resource type="PackedScene" uid="uid://8lyp1s71wcu2" path="res://entities/player/player_camera.tscn" id="2_sglur"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://cc7fkotb05rcb" path="res://entities/scripts/player/Viewmodel.cs" id="4_8fjmc"]
 [ext_resource type="Texture2D" uid="uid://cyjocaakkgefb" path="res://addons/kenney_prototype_textures/orange/texture_01.png" id="5_8fjmc"]
 [ext_resource type="CameraAttributesPractical" uid="uid://bacekqyur3xv5" path="res://entities/player/player_camera.tres" id="5_fkugw"]
+[ext_resource type="Shader" uid="uid://dysxpmx8b1j6j" path="res://entities/scripts/player/shader/fisheye.gdshader" id="7_qiwj3"]
 
 [sub_resource type="Curve" id="Curve_8fjmc"]
 _limits = [0.0, 2.0, 0.0, 1.0]
@@ -65,6 +66,12 @@ background_color = Color(0, 0, 0, 0)
 ambient_light_source = 2
 ambient_light_color = Color(0.93845, 0.93845, 0.93845, 1)
 ambient_light_energy = 1.1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_26q78"]
+shader = ExtResource("7_qiwj3")
+shader_parameter/effect_amount = 0.936
+
+[sub_resource type="QuadMesh" id="QuadMesh_bectd"]
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("DashTimer", "debugUI", "VArm", "DArm", "AArm", "MArm")]
 script = ExtResource("1_abrql")
@@ -378,6 +385,20 @@ light_energy = 2.83
 
 [node name="DashTimer" type="Timer" parent="."]
 one_shot = true
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Control"]
+material = SubResource("ShaderMaterial_26q78")
+position = Vector2(960.53, 539.75)
+scale = Vector2(-1920.06, 1080.5)
+mesh = SubResource("QuadMesh_bectd")
 
 [connection signal="toggled" from="DebugUI/DirectionClockWidget/Options/VBoxContainer/ShowAArm/AEnabled" to="DebugUI" method="_on_a_enabled_toggled"]
 [connection signal="toggled" from="DebugUI/DirectionClockWidget/Options/VBoxContainer/ShowVArm/VEnabled" to="DebugUI" method="_on_v_enabled_toggled"]
