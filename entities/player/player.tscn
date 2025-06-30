@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://cw1fd5xafowgq"]
+[gd_scene load_steps=21 format=3 uid="uid://cw1fd5xafowgq"]
 
 [ext_resource type="Script" uid="uid://crj6pkmwenl78" path="res://entities/scripts/player/Player.cs" id="1_abrql"]
 [ext_resource type="PackedScene" uid="uid://8lyp1s71wcu2" path="res://entities/player/player_camera.tscn" id="2_sglur"]
@@ -15,14 +15,10 @@ point_count = 3
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.252525, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[sub_resource type="Curve" id="Curve_bls4j"]
-_limits = [-1.0, 1.0, 0.0, 1.0]
-_data = [Vector2(0, 0.640449), 0.0, 0.0, 0, 0]
-point_count = 1
-
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_u3f3p"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_abrql"]
+height = 2.01
 
 [sub_resource type="SphereMesh" id="SphereMesh_abrql"]
 
@@ -63,11 +59,11 @@ script = ExtResource("1_abrql")
 Speed = 10.1
 SprintSpeed = 13.5
 JumpVelocity = 12.0
-AccelSpeed = 74.655
-DecelSpeed = 121.495
+AccelSpeed = 40.0
+DecelSpeed = 90.0
+LateralCofactor = 3.58
 AccelCurve = SubResource("Curve_abrql")
 DecelCurve = SubResource("Curve_sglur")
-LateralDampening = SubResource("Curve_bls4j")
 debugUI = NodePath("DebugUI")
 VArm = NodePath("DebugUI/DirectionClockWidget/Arms/VArm")
 DArm = NodePath("DebugUI/DirectionClockWidget/Arms/DArm")

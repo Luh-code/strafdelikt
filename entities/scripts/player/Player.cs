@@ -10,6 +10,7 @@ public partial class Player : CharacterBody3D
 	[Export] public float AccelSpeed = 2.0f;
 	[Export] public float DecelSpeed = 4.0f;
 	[Export] public float LateralCofactor = 2.5f;
+	[Export] public float LateralCofactor2 = 0.3f;
 	[Export] public Curve AccelCurve;
 	[Export] public Curve DecelCurve;
 	[Export] public DebugUi debugUI;
@@ -185,10 +186,10 @@ public partial class Player : CharacterBody3D
 			Vector2 a = new Vector2(acceleration.X, acceleration.Z).Normalized();
 			//float c = Mathf.Abs(1-v.Dot(a)); //Mathf.Min(Mathf.Abs(1-v.Dot(a)), 1.0f);
 			float c = Mathf.Min(Mathf.Abs(1-v.Dot(a)), 1.0f);
-			GD.Print("v: " + v + " a: " + a + " c: " + c);
+			//GD.Print("v: " + v + " a: " + a + " c: " + c);
 			float avAngle = Mathf.Atan2((a.Y*v.X) - (a.X*v.Y), (a.Y*v.Y) + (a.X*v.X));
 			Vector3 d = -(new Vector3(v.X, 0, v.Y).Normalized().Rotated(Vector3.Up, avAngle)) * deceleration * c * LateralCofactor;
-			d = d * -(Mathf.Pow(velocity.Length(), 0.3f)*new Vector2(d.X, d.Z).Normalized().Dot(v));
+			d = d * -(Mathf.Pow(velocity.Length(), LateralCofactor2)*new Vector2(d.X, d.Z).Normalized().Dot(v));
 			//d = d * Mathf.Pow(d.Length(), 0.5f);
 			//d = d.Rotated(Vector3.Up, avAngle);
 			
