@@ -14,7 +14,7 @@ public partial class Player : CharacterBody3D
 	[Export(PropertyHint.Range, "0, 300")] public float AirDecelSpeed = 3.0f;
 	[Export(PropertyHint.Range, "1, 10")] public float LateralCofactor = 4.1f;
 	[Export(PropertyHint.Range, "0, 1")] public float LateralCofactor2 = 0.3f;
-	[Export(PropertyHint.Range, "0, 100")] public float DashAcceleration = 48.0f;
+	[Export(PropertyHint.Range, "0, 100")] public float DashVelocity = 48.0f;
 	[Export] public Curve AccelCurve;
 	[Export] public Curve DecelCurve;
 	[Export] public Curve CounterAccelFactor;
@@ -257,7 +257,7 @@ public partial class Player : CharacterBody3D
 			}
 			GD.Print("dashing in: " + dashDirection);
 			
-			var dashPower = DashAcceleration;// + (actingDecelSpeed/10);
+			var dashPower = DashVelocity;// + (actingDecelSpeed/10);
 		
 			var dashVector = dashDirection * dashPower;
 			velocity += dashVector;
