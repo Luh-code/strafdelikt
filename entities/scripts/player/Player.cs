@@ -9,9 +9,9 @@ public partial class Player : CharacterBody3D
 	[Export] public float rotationSpeed = 6f;
 	[Export] public float AccelSpeed = 2.0f;
 	[Export] public float DecelSpeed = 4.0f;
+	[Export] public float LateralCofactor = 2.5f;
 	[Export] public Curve AccelCurve;
 	[Export] public Curve DecelCurve;
-	[Export] public Curve LateralDampening;
 	[Export] public DebugUi debugUI;
 	[Export] public Node2D VArm;
 	[Export] public Node2D DArm;
@@ -175,6 +175,7 @@ public partial class Player : CharacterBody3D
 			Vector3 acceleration = (smoothedDirection * accelStrength * AccelSpeed * (float) delta);
 			if ((velocityXZ + acceleration).Length() > actingSpeed)
 			{
+				//acceleration = Vector3.Zero;
 				acceleration = acceleration.Normalized() * (actingSpeed-velocityXZ.Length());
 			}
 			velocity += acceleration;
@@ -185,10 +186,11 @@ public partial class Player : CharacterBody3D
 			//float c = Mathf.Abs(1-v.Dot(a)); //Mathf.Min(Mathf.Abs(1-v.Dot(a)), 1.0f);
 			float c = Mathf.Min(Mathf.Abs(1-v.Dot(a)), 1.0f);
 			GD.Print("v: " + v + " a: " + a + " c: " + c);
-			Vector3 d = (-new Vector3(v.X, 0, v.Y).Normalized()) * deceleration * c * 2f;
-			
 			float avAngle = Mathf.Atan2((a.Y*v.X) - (a.X*v.Y), (a.Y*v.Y) + (a.X*v.X));
-			d = d.Rotated(Vector3.Up, avAngle);
+			Vector3 d = -(new Vector3(v.X, 0, v.Y).Normalized().Rotated(Vector3.Up, avAngle)) * deceleration * c * LateralCofactor;
+			d = d * -(Mathf.Pow(velocity.Length(), 0.3f)*new Vector2(d.X, d.Z).Normalized().Dot(v));
+			//d = d * Mathf.Pow(d.Length(), 0.5f);
+			//d = d.Rotated(Vector3.Up, avAngle);
 			
 			velocity += d;
 			
@@ -199,6 +201,10 @@ public partial class Player : CharacterBody3D
 			//VArm.SetRotation((Mathf.Abs(v.Dot(right))/(v.Length()*right.Length()))*4);
 			//DArm.SetRotation((Mathf.Abs(dXZ.Dot(right))/(dXZ.Length()*right.Length()))*4);
 			//AArm.SetRotation((Mathf.Abs(a.Dot(right))/(a.Length()*right.Length()))*6);
+			debugUI.v = velocity;
+			debugUI.a = acceleration;
+			debugUI.c = c;
+			debugUI.avAngle = Mathf.RadToDeg(avAngle);
 			VArm.SetRotation(MathF.Atan2(v.Y, v.X));
 			DArm.SetRotation(MathF.Atan2(dXZ.Y, dXZ.X));
 			DArm.SetScale(new Vector2(d.Length()/deceleration, DArm.GetScale().Y)*(debugUI.ShowBreakAsForce.ButtonPressed ? -1 : 1));

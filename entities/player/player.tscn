@@ -63,8 +63,8 @@ script = ExtResource("1_abrql")
 Speed = 10.1
 SprintSpeed = 13.5
 JumpVelocity = 12.0
-AccelSpeed = 71.415
-DecelSpeed = 132.735
+AccelSpeed = 74.655
+DecelSpeed = 121.495
 AccelCurve = SubResource("Curve_abrql")
 DecelCurve = SubResource("Curve_sglur")
 LateralDampening = SubResource("Curve_bls4j")
@@ -84,7 +84,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.01824, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_abrql")
 
-[node name="DebugUI" type="Control" parent="." node_paths=PackedStringArray("player", "ClockWidgetOptions", "ShowBreakAsForce")]
+[node name="DebugUI" type="Control" parent="." node_paths=PackedStringArray("player", "ClockWidgetOptions", "ShowBreakAsForce", "vValue", "aValue", "vnValue", "anValue", "cValue", "avAngleValue")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -95,6 +95,12 @@ script = ExtResource("3_sglur")
 player = NodePath("..")
 ClockWidgetOptions = NodePath("DirectionClockWidget/Options")
 ShowBreakAsForce = NodePath("DirectionClockWidget/Options/ShowBreakAsForce/CheckBox")
+vValue = NodePath("Control/VBoxContainer/v/vValue")
+aValue = NodePath("Control/VBoxContainer/a/aValue")
+vnValue = NodePath("Control/VBoxContainer/vn/vValue")
+anValue = NodePath("Control/VBoxContainer/an/aValue")
+cValue = NodePath("Control/VBoxContainer/c/cValue")
+avAngleValue = NodePath("Control/VBoxContainer/avAngle/avAngleValue")
 
 [node name="DirectionClockWidget" type="Control" parent="DebugUI"]
 anchors_preset = 0
@@ -161,6 +167,86 @@ offset_top = 6.0
 offset_right = 120.0
 offset_bottom = 29.0
 text = "Show Break as Force"
+
+[node name="Control" type="Control" parent="DebugUI"]
+layout_mode = 1
+anchor_left = 0.039
+anchor_top = 0.069
+anchor_right = 0.039
+anchor_bottom = 0.069
+offset_left = 11.12
+offset_top = 331.48
+offset_right = 393.12
+offset_bottom = 785.48
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DebugUI/Control"]
+layout_mode = 0
+offset_right = 382.0
+offset_bottom = 454.0
+
+[node name="v" type="HBoxContainer" parent="DebugUI/Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugUI/Control/VBoxContainer/v"]
+layout_mode = 2
+text = "v: "
+
+[node name="vValue" type="Label" parent="DebugUI/Control/VBoxContainer/v"]
+layout_mode = 2
+
+[node name="a" type="HBoxContainer" parent="DebugUI/Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugUI/Control/VBoxContainer/a"]
+layout_mode = 2
+text = "a: "
+
+[node name="aValue" type="Label" parent="DebugUI/Control/VBoxContainer/a"]
+layout_mode = 2
+
+[node name="vn" type="HBoxContainer" parent="DebugUI/Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugUI/Control/VBoxContainer/vn"]
+layout_mode = 2
+text = "vn: "
+
+[node name="vValue" type="Label" parent="DebugUI/Control/VBoxContainer/vn"]
+layout_mode = 2
+
+[node name="an" type="HBoxContainer" parent="DebugUI/Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugUI/Control/VBoxContainer/an"]
+layout_mode = 2
+text = "an: "
+
+[node name="aValue" type="Label" parent="DebugUI/Control/VBoxContainer/an"]
+layout_mode = 2
+
+[node name="c" type="HBoxContainer" parent="DebugUI/Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugUI/Control/VBoxContainer/c"]
+layout_mode = 2
+text = "c: "
+
+[node name="cValue" type="Label" parent="DebugUI/Control/VBoxContainer/c"]
+layout_mode = 2
+
+[node name="avAngle" type="HBoxContainer" parent="DebugUI/Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugUI/Control/VBoxContainer/avAngle"]
+layout_mode = 2
+text = "avAngle: "
+
+[node name="avAngleValue" type="Label" parent="DebugUI/Control/VBoxContainer/avAngle"]
+layout_mode = 2
+
+[node name="avAngleValue2" type="Label" parent="DebugUI/Control/VBoxContainer/avAngle"]
+layout_mode = 2
+text = "deg"
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 visible = false
