@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://cw1fd5xafowgq"]
+[gd_scene load_steps=22 format=3 uid="uid://cw1fd5xafowgq"]
 
 [ext_resource type="Script" uid="uid://crj6pkmwenl78" path="res://entities/scripts/player/Player.cs" id="1_abrql"]
 [ext_resource type="PackedScene" uid="uid://8lyp1s71wcu2" path="res://entities/player/player_camera.tscn" id="2_sglur"]
@@ -7,12 +7,18 @@
 [ext_resource type="Texture2D" uid="uid://cyjocaakkgefb" path="res://addons/kenney_prototype_textures/orange/texture_01.png" id="5_8fjmc"]
 [ext_resource type="CameraAttributesPractical" uid="uid://bacekqyur3xv5" path="res://entities/player/player_camera.tres" id="5_fkugw"]
 
-[sub_resource type="Curve" id="Curve_abrql"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.752525, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 3
+[sub_resource type="Curve" id="Curve_8fjmc"]
+_limits = [0.0, 2.0, 0.0, 1.0]
+_data = [Vector2(0, 2), 0.0, 0.0, 0, 0, Vector2(0.235294, 1.01124), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="Curve" id="Curve_sglur"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.252525, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_qiwj3"]
+_limits = [0.0, 2.0, 0.0, 2.0]
+_data = [Vector2(0, 0), 0.0, 1.41667, 0, 1, Vector2(0.705882, 1), 1.8093, 1.8093, 0, 0, Vector2(2, 1), -1.03637, 0.0, 0, 0]
 point_count = 3
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_u3f3p"]
@@ -61,9 +67,11 @@ SprintSpeed = 13.5
 JumpVelocity = 12.0
 AccelSpeed = 40.0
 DecelSpeed = 90.0
-LateralCofactor = 3.58
-AccelCurve = SubResource("Curve_abrql")
+LateralCofactor = 2.415
+LateralCofactor2 = 0.31
+AccelCurve = SubResource("Curve_8fjmc")
 DecelCurve = SubResource("Curve_sglur")
+CounterAccelFactor = SubResource("Curve_qiwj3")
 debugUI = NodePath("DebugUI")
 VArm = NodePath("DebugUI/DirectionClockWidget/Arms/VArm")
 DArm = NodePath("DebugUI/DirectionClockWidget/Arms/DArm")
@@ -80,7 +88,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.01824, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_abrql")
 
-[node name="DebugUI" type="Control" parent="." node_paths=PackedStringArray("player", "ClockWidgetOptions", "ShowBreakAsForce", "vValue", "aValue", "vnValue", "anValue", "cValue", "avAngleValue")]
+[node name="DebugUI" type="Control" parent="." node_paths=PackedStringArray("player", "ClockWidgetOptions", "ShowBreakAsForce", "vValue", "aValue", "vnValue", "anValue", "cValue", "avAngleValue", "speedValue")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -97,6 +105,7 @@ vnValue = NodePath("Control/VBoxContainer/vn/vValue")
 anValue = NodePath("Control/VBoxContainer/an/aValue")
 cValue = NodePath("Control/VBoxContainer/c/cValue")
 avAngleValue = NodePath("Control/VBoxContainer/avAngle/avAngleValue")
+speedValue = NodePath("Control/VBoxContainer/speedP/speedValue")
 
 [node name="DirectionClockWidget" type="Control" parent="DebugUI"]
 anchors_preset = 0
@@ -243,6 +252,20 @@ layout_mode = 2
 [node name="avAngleValue2" type="Label" parent="DebugUI/Control/VBoxContainer/avAngle"]
 layout_mode = 2
 text = "deg"
+
+[node name="speedP" type="HBoxContainer" parent="DebugUI/Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugUI/Control/VBoxContainer/speedP"]
+layout_mode = 2
+text = "speed:  "
+
+[node name="speedValue" type="Label" parent="DebugUI/Control/VBoxContainer/speedP"]
+layout_mode = 2
+
+[node name="speedValue2" type="Label" parent="DebugUI/Control/VBoxContainer/speedP"]
+layout_mode = 2
+text = "%"
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 visible = false

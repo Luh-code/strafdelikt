@@ -12,11 +12,13 @@ public partial class DebugUi : Control
 	[Export] public Label anValue;
 	[Export] public Label cValue;
 	[Export] public Label avAngleValue;
+	[Export] public Label speedValue;
 	
 	public Vector3 v = Vector3.Zero;
 	public Vector3 a = Vector3.Zero;
 	public float c = 0.0f;
 	public float avAngle = 0.0f;
+	public float speedP = 0.0f;
 	
 	public override void _Process(double delta)
 	{
@@ -27,5 +29,6 @@ public partial class DebugUi : Control
 		anValue.Text = a.Normalized().ToString();
 		cValue.Text = c.ToString();
 		avAngleValue.Text = avAngle.ToString();
+		speedValue.Text = ((int)(speedP*100)).ToString();
 	}
 }

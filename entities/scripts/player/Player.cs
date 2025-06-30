@@ -10,10 +10,13 @@ public partial class Player : CharacterBody3D
 	[Export(PropertyHint.Range, "0, 10")] public float rotationSpeed = 6f;
 	[Export(PropertyHint.Range, "0, 300")] public float AccelSpeed = 2.0f;
 	[Export(PropertyHint.Range, "0, 300")] public float DecelSpeed = 4.0f;
-	[Export(PropertyHint.Range, "1, 10")] public float LateralCofactor = 2.5f;
+	[Export(PropertyHint.Range, "1, 10")] public float LateralCofactor = 4.1f;
 	[Export(PropertyHint.Range, "0, 1")] public float LateralCofactor2 = 0.3f;
 	[Export] public Curve AccelCurve;
 	[Export] public Curve DecelCurve;
+	[Export] public Curve CounterAccelFactor;
+	[ExportSubgroup("HERE BE DRAGONS")]
+	[Export(PropertyHint.Range, "0, 2")] public float DecelerationDirMod = 1.0f;
 	[ExportSubgroup("Debug")]
 	[Export] public DebugUi debugUI;
 	[Export] public Node2D VArm;
@@ -156,9 +159,10 @@ public partial class Player : CharacterBody3D
 		//vGD.Print(acceleration);
 		
 		Vector3 velocityXZ = new Vector3(velocity.X, 0, velocity.Z);
+		float actingSpeed = (Input.IsActionPressed("move_sprint") ? SprintSpeed : Speed); // extend with ground speed for decel on floor
 		
 		// Calculate deceleration force
-		float decelStrength = DecelCurve.SampleBaked(decelProgress);
+		float decelStrength = DecelCurve.SampleBaked(velocityXZ.Length()/actingSpeed);
 		//Vector3 deceleration = velocityXZ.Normalized() * decelStrength * DecelSpeed * (float) delta;
 		float deceleration = decelStrength * DecelSpeed * (float) delta;
 		//if (velocityXZ.Length() - deceleration.Length() < 0)
@@ -170,11 +174,11 @@ public partial class Player : CharacterBody3D
 			deceleration = velocityXZ.Length();
 		}
 		
-		float actingSpeed = (Input.IsActionPressed("move_sprint") ? SprintSpeed : Speed);
 		if (movementDirection != Vector3.Zero && !firstPersonCamera.debug)// && velocity.Length() < Speed)
 		{
 			// Accelerate
-			float accelStrength = AccelCurve.SampleBaked(accelProgress);
+			float accelStrength = AccelCurve.SampleBaked(velocityXZ.Length()/actingSpeed);
+			debugUI.speedP = velocityXZ.Length()/actingSpeed;
 			Vector3 acceleration = (smoothedDirection * accelStrength * AccelSpeed * (float) delta);
 			if ((velocityXZ + acceleration).Length() > actingSpeed)
 			{
@@ -187,10 +191,11 @@ public partial class Player : CharacterBody3D
 			Vector2 v = new Vector2(velocity.X, velocity.Z).Normalized();
 			Vector2 a = new Vector2(acceleration.X, acceleration.Z).Normalized();
 			//float c = Mathf.Abs(1-v.Dot(a)); //Mathf.Min(Mathf.Abs(1-v.Dot(a)), 1.0f);
-			float c = Mathf.Min(Mathf.Abs(1-v.Dot(a)), 1.0f);
+			//float c = Mathf.Min(Mathf.Abs(1-v.Dot(a)), 1.0f);
+			float c = CounterAccelFactor.SampleBaked(1-v.Dot(a));
 			//GD.Print("v: " + v + " a: " + a + " c: " + c);
 			float avAngle = Mathf.Atan2((a.Y*v.X) - (a.X*v.Y), (a.Y*v.Y) + (a.X*v.X));
-			Vector3 d = -(new Vector3(v.X, 0, v.Y).Normalized().Rotated(Vector3.Up, avAngle)) * deceleration * c * LateralCofactor;
+			Vector3 d = -(new Vector3(v.X, 0, v.Y).Normalized().Rotated(Vector3.Up, avAngle * DecelerationDirMod)) * deceleration * c * LateralCofactor;
 			d = d * -(Mathf.Pow(velocity.Length(), LateralCofactor2)*new Vector2(d.X, d.Z).Normalized().Dot(v));
 			//d = d * Mathf.Pow(d.Length(), 0.5f);
 			//d = d.Rotated(Vector3.Up, avAngle);
