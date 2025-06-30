@@ -13,12 +13,12 @@ _data = [Vector2(0, 2), 0.0, 0.0, 0, 0, Vector2(0.235294, 1.01124), 0.0, 0.0, 0,
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_sglur"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.252525, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 3
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="Curve" id="Curve_qiwj3"]
 _limits = [0.0, 2.0, 0.0, 2.0]
-_data = [Vector2(0, 0), 0.0, 1.41667, 0, 1, Vector2(0.705882, 1), 1.8093, 1.8093, 0, 0, Vector2(2, 1), -1.03637, 0.0, 0, 0]
+_data = [Vector2(0, 0), 0.0, 1.41667, 0, 1, Vector2(0.705882, 1), 1.52055, 1.52055, 0, 0, Vector2(2, 1), -1.03637, 0.0, 0, 0]
 point_count = 3
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_u3f3p"]
@@ -67,6 +67,7 @@ SprintSpeed = 13.5
 JumpVelocity = 12.0
 AccelSpeed = 40.0
 DecelSpeed = 90.0
+AirDecelSpeed = 20.015
 LateralCofactor = 2.415
 LateralCofactor2 = 0.31
 AccelCurve = SubResource("Curve_8fjmc")

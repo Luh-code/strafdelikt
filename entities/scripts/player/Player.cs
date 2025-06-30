@@ -10,11 +10,13 @@ public partial class Player : CharacterBody3D
 	[Export(PropertyHint.Range, "0, 10")] public float rotationSpeed = 6f;
 	[Export(PropertyHint.Range, "0, 300")] public float AccelSpeed = 2.0f;
 	[Export(PropertyHint.Range, "0, 300")] public float DecelSpeed = 4.0f;
+	[Export(PropertyHint.Range, "0, 300")] public float AirDecelSpeed = 3.0f;
 	[Export(PropertyHint.Range, "1, 10")] public float LateralCofactor = 4.1f;
 	[Export(PropertyHint.Range, "0, 1")] public float LateralCofactor2 = 0.3f;
 	[Export] public Curve AccelCurve;
 	[Export] public Curve DecelCurve;
 	[Export] public Curve CounterAccelFactor;
+	//[Export] public Curve AirResistanceCofactor;
 	[ExportSubgroup("HERE BE DRAGONS")]
 	[Export(PropertyHint.Range, "0, 2")] public float DecelerationDirMod = 1.0f;
 	[ExportSubgroup("Debug")]
@@ -160,11 +162,12 @@ public partial class Player : CharacterBody3D
 		
 		Vector3 velocityXZ = new Vector3(velocity.X, 0, velocity.Z);
 		float actingSpeed = (Input.IsActionPressed("move_sprint") ? SprintSpeed : Speed); // extend with ground speed for decel on floor
+		float actingDecelSpeed = !IsOnFloor() ? AirDecelSpeed : DecelSpeed;
 		
 		// Calculate deceleration force
 		float decelStrength = DecelCurve.SampleBaked(velocityXZ.Length()/actingSpeed);
 		//Vector3 deceleration = velocityXZ.Normalized() * decelStrength * DecelSpeed * (float) delta;
-		float deceleration = decelStrength * DecelSpeed * (float) delta;
+		float deceleration = decelStrength * actingDecelSpeed * (float) delta;
 		//if (velocityXZ.Length() - deceleration.Length() < 0)
 		//{
 		//	deceleration = deceleration.Normalized() * (velocityXZ.Length());
