@@ -4,6 +4,7 @@ using System;
 public partial class Player : CharacterBody3D
 {
 	[ExportSubgroup("Main")]
+	[Export(PropertyHint.Range, "0, 10")] public float Mass = 1.0f;
 	[Export(PropertyHint.Range, "0, 50")] public float Speed = 8.0f;
 	[Export(PropertyHint.Range, "0, 50")] public float SprintSpeed = 15.0f;
 	[Export(PropertyHint.Range, "0, 20")] public float JumpVelocity = 10f;
@@ -122,7 +123,7 @@ public partial class Player : CharacterBody3D
 		Vector3 velocity = Velocity;
 
 		// Add the gravity
-		if (!IsOnFloor()) velocity.Y -= gravity * (float)GetPhysicsProcessDeltaTime();
+		if (!IsOnFloor()) velocity.Y -= gravity * Mass * (float)GetPhysicsProcessDeltaTime();
 
 		// Convert input to movementDirection
 		movementDirection = (Transform.Basis * new Vector3(inputDirection.X, 0, inputDirection.Y)).Normalized();
@@ -278,7 +279,7 @@ public partial class Player : CharacterBody3D
 				boostDirection = Vector3.Zero;
 				//boostDirection = new Vector3(0, 0, -1).Rotated(Vector3.Up, firstPersonCamera.Rotation.Y);
 			}
-			velocity += boostDirection * JumpSpeedBoost;
+			velocity += boostDirection * JumpSpeedBoost * (Input.IsActionPressed("move_sprint") ? 1.0f : 0.0f);
 		}
 		
 		//if (!DashTimer.IsStopped())

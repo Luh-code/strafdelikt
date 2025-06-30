@@ -9,7 +9,7 @@
 
 [sub_resource type="Curve" id="Curve_8fjmc"]
 _limits = [0.0, 2.0, 0.0, 1.0]
-_data = [Vector2(0, 2), 0.0, 0.0, 0, 0, Vector2(0.235294, 1.01124), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 2), 0.0, 0.0, 0, 0, Vector2(0.112088, 1.00664), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_sglur"]
@@ -68,16 +68,16 @@ ambient_light_energy = 1.1
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("DashTimer", "debugUI", "VArm", "DArm", "AArm", "MArm")]
 script = ExtResource("1_abrql")
+Mass = 1.325
 Speed = 10.1
 SprintSpeed = 13.5
-JumpVelocity = 12.0
-JumpSpeedBoost = 3.475
+JumpVelocity = 15.05
+JumpSpeedBoost = 4.415
 AccelSpeed = 91.41
 DecelSpeed = 57.765
 AirDecelSpeed = 12.918
-LateralCofactor = 2.415
-LateralCofactor2 = 0.31
-DashAcceleration = 13.193
+LateralCofactor = 3.005
+DashVelocity = 14.405
 AccelCurve = SubResource("Curve_8fjmc")
 DecelCurve = SubResource("Curve_sglur")
 CounterAccelFactor = SubResource("Curve_qiwj3")
