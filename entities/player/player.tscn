@@ -1,11 +1,10 @@
-[gd_scene load_steps=31 format=3 uid="uid://cw1fd5xafowgq"]
+[gd_scene load_steps=30 format=3 uid="uid://cw1fd5xafowgq"]
 
 [ext_resource type="Script" uid="uid://crj6pkmwenl78" path="res://entities/scripts/player/Player.cs" id="1_abrql"]
 [ext_resource type="PackedScene" uid="uid://8lyp1s71wcu2" path="res://entities/player/player_camera.tscn" id="2_sglur"]
 [ext_resource type="Script" uid="uid://bu5lhtrhgeeqy" path="res://entities/player/DebugUi.cs" id="3_sglur"]
 [ext_resource type="Script" uid="uid://cc7fkotb05rcb" path="res://entities/scripts/player/Viewmodel.cs" id="4_8fjmc"]
 [ext_resource type="Texture2D" uid="uid://cyjocaakkgefb" path="res://addons/kenney_prototype_textures/orange/texture_01.png" id="5_8fjmc"]
-[ext_resource type="CameraAttributesPractical" uid="uid://bacekqyur3xv5" path="res://entities/player/player_camera.tres" id="5_fkugw"]
 [ext_resource type="Shader" uid="uid://dysxpmx8b1j6j" path="res://entities/scripts/player/shader/fisheye.gdshader" id="7_qiwj3"]
 [ext_resource type="Shader" uid="uid://dh3aw32ywpmh1" path="res://entities/scripts/player/shader/ca.gdshader" id="8_26q78"]
 [ext_resource type="Shader" uid="uid://d1fpwoj1468qm" path="res://entities/scripts/player/shader/psx.gdshader" id="9_bectd"]
@@ -25,6 +24,11 @@ _data = [Vector2(0, 0), 0.0, 0.5, 0, 1, Vector2(2, 1), 0.553254, 0.0, 1, 0]
 point_count = 2
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_u3f3p"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_26q78"]
+albedo_texture = ExtResource("5_8fjmc")
+uv1_triplanar = true
+texture_filter = 5
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_abrql"]
 height = 2.01
@@ -57,11 +61,6 @@ colors = PackedColorArray(0.648224, 0.0556151, 0.625715, 1, 0.98681, 0.671771, 0
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_sglur"]
 gradient = SubResource("Gradient_26q78")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_26q78"]
-albedo_texture = ExtResource("5_8fjmc")
-uv1_triplanar = true
-texture_filter = 5
-
 [sub_resource type="ViewportTexture" id="ViewportTexture_bectd"]
 viewport_path = NodePath("Viewmodel/SubViewport")
 
@@ -73,7 +72,7 @@ shader_parameter/effect_amount = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bectd"]
 shader = ExtResource("8_26q78")
-shader_parameter/aberration_intensity = 1.0
+shader_parameter/aberration_intensity = 1.6
 shader_parameter/r_displacement = Vector2(1, 0)
 shader_parameter/g_displacement = Vector2(0, 0)
 shader_parameter/b_displacement = Vector2(-1, 0)
@@ -94,6 +93,7 @@ shader_parameter/enable_dithering = true
 shader_parameter/dither_strength = 0.3
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("DashTimer", "debugUI", "VArm", "DArm", "AArm", "MArm")]
+floor_max_angle = 1.20428
 script = ExtResource("1_abrql")
 Mass = 1.325
 Speed = 7.675
@@ -122,6 +122,22 @@ mesh = SubResource("CapsuleMesh_u3f3p")
 
 [node name="PlayerCamera" parent="." instance=ExtResource("2_sglur")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.01824, 0)
+
+[node name="Node3D2" type="Node3D" parent="PlayerCamera/Camera3D" index="0"]
+transform = Transform3D(0.999743, 0, 0.0226873, 0, 1, 0, -0.0226873, 0, 0.999743, -0.325, -0.748, 0.229)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="PlayerCamera/Camera3D/Node3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.764686, 0.601629, -0.661988)
+material_override = SubResource("StandardMaterial3D_26q78")
+size = Vector3(0.0439819, 0.0706909, 0.256597)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="PlayerCamera/Camera3D/Node3D2"]
+transform = Transform3D(1, 0, 0, 0, 0.300706, -0.953717, 0, 0.953717, 0.300706, 0.764832, 0.51167, -0.597791)
+material_override = SubResource("StandardMaterial3D_26q78")
+size = Vector3(0.0351379, 0.0576538, 0.202632)
+
+[node name="Node3D" type="Node3D" parent="PlayerCamera/Camera3D" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.01824, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -364,7 +380,6 @@ layout_mode = 2
 text = "%"
 
 [node name="Viewmodel" type="SubViewportContainer" parent="." node_paths=PackedStringArray("viewport")]
-visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -384,32 +399,7 @@ canvas_item_default_texture_filter = 2
 gui_disable_input = true
 canvas_cull_mask = 4293919744
 size = Vector2i(1920, 1080)
-render_target_update_mode = 0
-
-[node name="CSGBox3D2" type="CSGBox3D" parent="Viewmodel/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.045, 0.665, -1.36)
-layers = 1024
-material_override = SubResource("StandardMaterial3D_26q78")
-size = Vector3(0.29, 0.385, 0.865)
-
-[node name="CSGBox3D3" type="CSGBox3D" parent="Viewmodel/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 0.300706, -0.953717, 0, 0.953717, 0.300706, 1.045, 0.405, -1.36)
-layers = 1024
-material_override = SubResource("StandardMaterial3D_26q78")
-size = Vector3(0.275, 0.275, 0.705)
-
-[node name="Camera3D" type="Camera3D" parent="Viewmodel/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.005, 1.105, 0.125)
-cull_mask = 1024
-attributes = ExtResource("5_fkugw")
-current = true
-fov = 79.5
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Viewmodel/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 0.258819, 0.965926, 0, -0.965926, 0.258819, -1, 4, -4)
-layers = 1024
-light_energy = 2.83
-light_cull_mask = 4293919744
+render_target_update_mode = 4
 
 [node name="TextureRect" type="TextureRect" parent="."]
 visible = false

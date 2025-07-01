@@ -3,9 +3,9 @@
 [resource]
 exposure_multiplier = 0.595
 auto_exposure_enabled = true
-auto_exposure_scale = 0.05
+auto_exposure_scale = 0.09
 dof_blur_far_enabled = true
 dof_blur_far_distance = 29.47
 dof_blur_near_enabled = true
-dof_blur_near_distance = 1.8
+dof_blur_near_distance = 1.3
 dof_blur_near_transition = 2.31

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cj1cyskrj6ktx"]
+[gd_scene load_steps=9 format=3 uid="uid://cj1cyskrj6ktx"]
 
 [ext_resource type="Texture2D" uid="uid://chu8r88b2d8qh" path="res://addons/kenney_prototype_textures/light/texture_12.png" id="1_37kl0"]
 [ext_resource type="Material" uid="uid://dbifdu632cmce" path="res://matrials/OrangePlainT.tres" id="2_ykrsh"]
@@ -12,6 +12,8 @@ uv1_triplanar = true
 texture_filter = 5
 
 [sub_resource type="PrismMesh" id="PrismMesh_vbegm"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_ykrsh"]
 
 [node name="root" type="Node3D"]
 
@@ -436,6 +438,43 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1, 3.7
 material_override = ExtResource("2_ykrsh")
 use_collision = true
 size = Vector3(1.2, 0.6, 2.8)
+
+[node name="surf" type="Node3D" parent="Node3D"]
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="Node3D/surf"]
+transform = Transform3D(6.65, 0, 0, 0, 4.8, 0, 0, 0, 13.44, -6.65, 7, -40.32)
+material_override = ExtResource("3_g14j6")
+use_collision = true
+mesh = SubResource("PrismMesh_ykrsh")
+
+[node name="CSGMesh3D2" type="CSGMesh3D" parent="Node3D/surf"]
+transform = Transform3D(6.65, 0, 0, 0, 4.8, 0, 0, 0, 13.44, -26.6, 7, -94.08)
+material_override = ExtResource("3_g14j6")
+use_collision = true
+mesh = SubResource("PrismMesh_ykrsh")
+
+[node name="CSGMesh3D5" type="CSGMesh3D" parent="Node3D/surf"]
+transform = Transform3D(6.65, 0, 0, 0, 4.8, 0, 0, 0, 13.44, -6.65, 7, -147.84)
+material_override = ExtResource("3_g14j6")
+use_collision = true
+mesh = SubResource("PrismMesh_ykrsh")
+
+[node name="CSGMesh3D3" type="CSGMesh3D" parent="Node3D/surf"]
+transform = Transform3D(8.6184, 0, 0, 0, 4.8, 0, 0, 0, 13.44, -41.8684, 7, -94.08)
+material_override = ExtResource("3_g14j6")
+use_collision = true
+mesh = SubResource("PrismMesh_ykrsh")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Node3D/surf/CSGMesh3D3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.999927, -0.000817537, 0.33704, 0)
+material_override = ExtResource("3_g14j6")
+size = Vector3(0.112622, 0.182617, 1)
+
+[node name="CSGMesh3D4" type="CSGMesh3D" parent="Node3D/surf"]
+transform = Transform3D(10.773, 0, 0, 0, 4.8, 0, 0, 0, 13.44, -41.629, 14.2, -107.52)
+material_override = ExtResource("3_g14j6")
+use_collision = true
+mesh = SubResource("PrismMesh_ykrsh")
 
 [node name="Player" parent="." instance=ExtResource("3_6uqi0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 5)
