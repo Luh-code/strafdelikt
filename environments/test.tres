@@ -12,3 +12,4 @@ sdfgi_enabled = true
 sdfgi_use_occlusion = true
 volumetric_fog_enabled = true
 volumetric_fog_density = 0.095
+volumetric_fog_temporal_reprojection_enabled = false

@@ -5,6 +5,7 @@ uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_linear_mipmap;
 // Anti fish eye (negative amount) / fish eye (positive)
 uniform float effect_amount : hint_range(-2.5, 2.5) = 1.0;
 
+
 void fragment() {
 	// glsl -> godot shader
 	vec2 iResolution = 1.0 / SCREEN_PIXEL_SIZE;

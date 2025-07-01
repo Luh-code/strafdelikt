@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://cw1fd5xafowgq"]
+[gd_scene load_steps=31 format=3 uid="uid://cw1fd5xafowgq"]
 
 [ext_resource type="Script" uid="uid://crj6pkmwenl78" path="res://entities/scripts/player/Player.cs" id="1_abrql"]
 [ext_resource type="PackedScene" uid="uid://8lyp1s71wcu2" path="res://entities/player/player_camera.tscn" id="2_sglur"]
@@ -7,6 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://cyjocaakkgefb" path="res://addons/kenney_prototype_textures/orange/texture_01.png" id="5_8fjmc"]
 [ext_resource type="CameraAttributesPractical" uid="uid://bacekqyur3xv5" path="res://entities/player/player_camera.tres" id="5_fkugw"]
 [ext_resource type="Shader" uid="uid://dysxpmx8b1j6j" path="res://entities/scripts/player/shader/fisheye.gdshader" id="7_qiwj3"]
+[ext_resource type="Shader" uid="uid://dh3aw32ywpmh1" path="res://entities/scripts/player/shader/ca.gdshader" id="8_26q78"]
+[ext_resource type="Shader" uid="uid://d1fpwoj1468qm" path="res://entities/scripts/player/shader/psx.gdshader" id="9_bectd"]
 
 [sub_resource type="Curve" id="Curve_8fjmc"]
 _limits = [0.0, 2.0, 0.0, 1.0]
@@ -60,23 +62,41 @@ albedo_texture = ExtResource("5_8fjmc")
 uv1_triplanar = true
 texture_filter = 5
 
-[sub_resource type="Environment" id="Environment_8fjmc"]
-background_mode = 1
-background_color = Color(0, 0, 0, 0)
-ambient_light_source = 2
-ambient_light_color = Color(0.93845, 0.93845, 0.93845, 1)
-ambient_light_energy = 1.1
+[sub_resource type="ViewportTexture" id="ViewportTexture_bectd"]
+viewport_path = NodePath("Viewmodel/SubViewport")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_26q78"]
 shader = ExtResource("7_qiwj3")
-shader_parameter/effect_amount = 0.936
+shader_parameter/effect_amount = 1.0
 
 [sub_resource type="QuadMesh" id="QuadMesh_bectd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bectd"]
+shader = ExtResource("8_26q78")
+shader_parameter/aberration_intensity = 1.0
+shader_parameter/r_displacement = Vector2(1, 0)
+shader_parameter/g_displacement = Vector2(0, 0)
+shader_parameter/b_displacement = Vector2(-1, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wvtmh"]
+render_priority = 0
+shader = ExtResource("9_bectd")
+shader_parameter/enable_fog = true
+shader_parameter/fog_color = Color(0, 0, 0, 1)
+shader_parameter/noise_color = Color(0, 0, 0, 1)
+shader_parameter/fog_distance = 100.0
+shader_parameter/fog_fade_range = 50.0
+shader_parameter/enable_noise = true
+shader_parameter/noise_time_fac = 4.0
+shader_parameter/enable_color_limitation = true
+shader_parameter/color_levels = 32
+shader_parameter/enable_dithering = true
+shader_parameter/dither_strength = 0.3
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("DashTimer", "debugUI", "VArm", "DArm", "AArm", "MArm")]
 script = ExtResource("1_abrql")
 Mass = 1.325
-Speed = 10.1
+Speed = 7.675
 SprintSpeed = 13.5
 JumpVelocity = 15.05
 JumpSpeedBoost = 4.415
@@ -84,7 +104,7 @@ AccelSpeed = 91.41
 DecelSpeed = 57.765
 AirDecelSpeed = 12.918
 LateralCofactor = 3.005
-DashVelocity = 34.993
+DashVelocity = 24.843
 AccelCurve = SubResource("Curve_8fjmc")
 DecelCurve = SubResource("Curve_sglur")
 CounterAccelFactor = SubResource("Curve_qiwj3")
@@ -115,8 +135,8 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("3_sglur")
 player = NodePath("..")
-ClockWidgetOptions = NodePath("DirectionClockWidget/Options")
-ShowBreakAsForce = NodePath("DirectionClockWidget/Options/VBoxContainer/ShowBreakAsForce/CheckBox")
+ClockWidgetOptions = NodePath("DirectionClockWidget/CanvasLayer/Options")
+ShowBreakAsForce = NodePath("DirectionClockWidget/CanvasLayer/Options/VBoxContainer/ShowBreakAsForce/CheckBox")
 vValue = NodePath("Control/VBoxContainer/v/vValue")
 aValue = NodePath("Control/VBoxContainer/a/aValue")
 vnValue = NodePath("Control/VBoxContainer/vn/vValue")
@@ -179,68 +199,72 @@ scale = Vector2(150, 7.2)
 mesh = SubResource("QuadMesh_sglur")
 texture = SubResource("GradientTexture1D_sglur")
 
-[node name="Options" type="Control" parent="DebugUI/DirectionClockWidget"]
-anchors_preset = 0
-offset_left = 321.0
-offset_right = 475.0
-offset_bottom = 40.0
+[node name="CanvasLayer" type="CanvasLayer" parent="DebugUI/DirectionClockWidget"]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="DebugUI/DirectionClockWidget/Options"]
+[node name="Options" type="Control" parent="DebugUI/DirectionClockWidget/CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 396.0
+offset_top = 75.0
+offset_right = 623.0
+offset_bottom = 387.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DebugUI/DirectionClockWidget/CanvasLayer/Options"]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="ShowBreakAsForce" type="HBoxContainer" parent="DebugUI/DirectionClockWidget/Options/VBoxContainer"]
+[node name="ShowBreakAsForce" type="HBoxContainer" parent="DebugUI/DirectionClockWidget/CanvasLayer/Options/VBoxContainer"]
 layout_mode = 2
 
-[node name="CheckBox" type="CheckBox" parent="DebugUI/DirectionClockWidget/Options/VBoxContainer/ShowBreakAsForce"]
+[node name="CheckBox" type="CheckBox" parent="DebugUI/DirectionClockWidget/CanvasLayer/Options/VBoxContainer/ShowBreakAsForce"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="DebugUI/DirectionClockWidget/Options/VBoxContainer/ShowBreakAsForce"]
+[node name="Label" type="Label" parent="DebugUI/DirectionClockWidget/CanvasLayer/Options/VBoxContainer/ShowBreakAsForce"]
 layout_mode = 2
 text = "Show Break as Force"
 
-[node name="ShowAArm" type="HBoxContainer" parent="DebugUI/DirectionClockWidget/Options/VBoxContainer"]
+[node name="ShowAArm" type="HBoxContainer" parent="DebugUI/DirectionClockWidget/CanvasLayer/Options/VBoxContainer"]
 layout_mode = 2
 
-[node name="AEnabled" type="CheckBox" parent="DebugUI/DirectionClockWidget/Options/VBoxContainer/ShowAArm"]
+[node name="AEnabled" type="CheckBox" parent="DebugUI/DirectionClockWidget/CanvasLayer/Options/VBoxContainer/ShowAArm"]
 layout_mode = 2
 button_pressed = true
 
-[node name="ShowVArm" type="Label" parent="DebugUI/DirectionClockWidget/Options/VBoxContainer/ShowAArm"]
+[node name="ShowVArm" type="Label" parent="DebugUI/DirectionClockWidget/CanvasLayer/Options/VBoxContainer/ShowAArm"]
 layout_mode = 2
 text = "Show AArm"
 
-[node name="ShowVArm" type="HBoxContainer" parent="DebugUI/DirectionClockWidget/Options/VBoxContainer"]
+[node name="ShowVArm" type="HBoxContainer" parent="DebugUI/DirectionClockWidget/CanvasLayer/Options/VBoxContainer"]
 layout_mode = 2
 
-[node name="VEnabled" type="CheckBox" parent="DebugUI/DirectionClockWidget/Options/VBoxContainer/ShowVArm"]
+[node name="VEnabled" type="CheckBox" parent="DebugUI/DirectionClockWidget/CanvasLayer/Options/VBoxContainer/ShowVArm"]
 layout_mode = 2
 button_pressed = true
 
-[node name="ShowVArm" type="Label" parent="DebugUI/DirectionClockWidget/Options/VBoxContainer/ShowVArm"]
+[node name="ShowVArm" type="Label" parent="DebugUI/DirectionClockWidget/CanvasLayer/Options/VBoxContainer/ShowVArm"]
 layout_mode = 2
 text = "Show VArm"
 
-[node name="ShowDArm" type="HBoxContainer" parent="DebugUI/DirectionClockWidget/Options/VBoxContainer"]
+[node name="ShowDArm" type="HBoxContainer" parent="DebugUI/DirectionClockWidget/CanvasLayer/Options/VBoxContainer"]
 layout_mode = 2
 
-[node name="DEnabled" type="CheckBox" parent="DebugUI/DirectionClockWidget/Options/VBoxContainer/ShowDArm"]
+[node name="DEnabled" type="CheckBox" parent="DebugUI/DirectionClockWidget/CanvasLayer/Options/VBoxContainer/ShowDArm"]
 layout_mode = 2
 button_pressed = true
 
-[node name="ShowVArm" type="Label" parent="DebugUI/DirectionClockWidget/Options/VBoxContainer/ShowDArm"]
+[node name="ShowVArm" type="Label" parent="DebugUI/DirectionClockWidget/CanvasLayer/Options/VBoxContainer/ShowDArm"]
 layout_mode = 2
 text = "Show DArm"
 
-[node name="ShowMArm" type="HBoxContainer" parent="DebugUI/DirectionClockWidget/Options/VBoxContainer"]
+[node name="ShowMArm" type="HBoxContainer" parent="DebugUI/DirectionClockWidget/CanvasLayer/Options/VBoxContainer"]
 layout_mode = 2
 
-[node name="MEnabled" type="CheckBox" parent="DebugUI/DirectionClockWidget/Options/VBoxContainer/ShowMArm"]
+[node name="MEnabled" type="CheckBox" parent="DebugUI/DirectionClockWidget/CanvasLayer/Options/VBoxContainer/ShowMArm"]
 layout_mode = 2
 button_pressed = true
 
-[node name="ShowVArm" type="Label" parent="DebugUI/DirectionClockWidget/Options/VBoxContainer/ShowMArm"]
+[node name="ShowVArm" type="Label" parent="DebugUI/DirectionClockWidget/CanvasLayer/Options/VBoxContainer/ShowMArm"]
 layout_mode = 2
 text = "Show MArm"
 
@@ -338,50 +362,65 @@ layout_mode = 2
 layout_mode = 2
 text = "%"
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="Viewmodel" type="SubViewportContainer" parent="." node_paths=PackedStringArray("viewport")]
 visible = false
-
-[node name="Viewmodel" type="SubViewportContainer" parent="CanvasLayer" node_paths=PackedStringArray("viewport")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+stretch = true
 script = ExtResource("4_8fjmc")
 viewport = NodePath("SubViewport")
 
-[node name="SubViewport" type="SubViewport" parent="CanvasLayer/Viewmodel"]
-own_world_3d = true
+[node name="SubViewport" type="SubViewport" parent="Viewmodel"]
 transparent_bg = true
 handle_input_locally = false
 msaa_3d = 3
 use_debanding = true
-debug_draw = 1
+debug_draw = 26
+canvas_item_default_texture_filter = 2
 gui_disable_input = true
+canvas_cull_mask = 4293919744
 size = Vector2i(1920, 1080)
 render_target_update_mode = 0
 
-[node name="CSGBox3D2" type="CSGBox3D" parent="CanvasLayer/Viewmodel/SubViewport"]
+[node name="CSGBox3D2" type="CSGBox3D" parent="Viewmodel/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.045, 0.665, -1.36)
+layers = 1024
 material_override = SubResource("StandardMaterial3D_26q78")
 size = Vector3(0.29, 0.385, 0.865)
 
-[node name="CSGBox3D3" type="CSGBox3D" parent="CanvasLayer/Viewmodel/SubViewport"]
+[node name="CSGBox3D3" type="CSGBox3D" parent="Viewmodel/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 0.300706, -0.953717, 0, 0.953717, 0.300706, 1.045, 0.405, -1.36)
+layers = 1024
 material_override = SubResource("StandardMaterial3D_26q78")
 size = Vector3(0.275, 0.275, 0.705)
 
-[node name="Camera3D" type="Camera3D" parent="CanvasLayer/Viewmodel/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
-environment = SubResource("Environment_8fjmc")
+[node name="Camera3D" type="Camera3D" parent="Viewmodel/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.005, 1.105, 0.125)
+cull_mask = 1024
 attributes = ExtResource("5_fkugw")
 current = true
-fov = 90.0
+fov = 79.5
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="CanvasLayer/Viewmodel/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
-visible = false
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Viewmodel/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 0.258819, 0.965926, 0, -0.965926, 0.258819, -1, 4, -4)
+layers = 1024
 light_energy = 2.83
+light_cull_mask = 4293919744
+
+[node name="TextureRect" type="TextureRect" parent="."]
+visible = false
+texture_filter = 5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("ViewportTexture_bectd")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="DashTimer" type="Timer" parent="."]
 one_shot = true
@@ -400,9 +439,26 @@ position = Vector2(960.53, 539.75)
 scale = Vector2(-1920.06, 1080.5)
 mesh = SubResource("QuadMesh_bectd")
 
-[connection signal="toggled" from="DebugUI/DirectionClockWidget/Options/VBoxContainer/ShowAArm/AEnabled" to="DebugUI" method="_on_a_enabled_toggled"]
-[connection signal="toggled" from="DebugUI/DirectionClockWidget/Options/VBoxContainer/ShowVArm/VEnabled" to="DebugUI" method="_on_v_enabled_toggled"]
-[connection signal="toggled" from="DebugUI/DirectionClockWidget/Options/VBoxContainer/ShowDArm/DEnabled" to="DebugUI" method="_on_d_enabled_toggled"]
-[connection signal="toggled" from="DebugUI/DirectionClockWidget/Options/VBoxContainer/ShowMArm/MEnabled" to="DebugUI" method="_on_m_enabled_toggled"]
+[node name="CanvasLayer" type="CanvasLayer" parent="Control"]
+
+[node name="MeshInstance2D2" type="MeshInstance2D" parent="Control/CanvasLayer"]
+material = SubResource("ShaderMaterial_bectd")
+position = Vector2(960.5, 540.5)
+scale = Vector2(1919, 1079)
+mesh = SubResource("QuadMesh_bectd")
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="Control"]
+visible = false
+
+[node name="MeshInstance2D2" type="MeshInstance2D" parent="Control/CanvasLayer2"]
+material = SubResource("ShaderMaterial_wvtmh")
+position = Vector2(960.5, 540.5)
+scale = Vector2(1919, 1079)
+mesh = SubResource("QuadMesh_bectd")
+
+[connection signal="toggled" from="DebugUI/DirectionClockWidget/CanvasLayer/Options/VBoxContainer/ShowAArm/AEnabled" to="DebugUI" method="_on_a_enabled_toggled"]
+[connection signal="toggled" from="DebugUI/DirectionClockWidget/CanvasLayer/Options/VBoxContainer/ShowVArm/VEnabled" to="DebugUI" method="_on_v_enabled_toggled"]
+[connection signal="toggled" from="DebugUI/DirectionClockWidget/CanvasLayer/Options/VBoxContainer/ShowDArm/DEnabled" to="DebugUI" method="_on_d_enabled_toggled"]
+[connection signal="toggled" from="DebugUI/DirectionClockWidget/CanvasLayer/Options/VBoxContainer/ShowMArm/MEnabled" to="DebugUI" method="_on_m_enabled_toggled"]
 
 [editable path="PlayerCamera"]

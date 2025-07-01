@@ -7,6 +7,6 @@ public partial class Viewmodel : SubViewportContainer
 	
 	public override void _Ready()
 	{
-		viewport.Size = DisplayServer.ScreenGetSize();
+		//viewport.Size = DisplayServer.ScreenGetSize();
 	}
 }

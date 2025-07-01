@@ -1,0 +1,363 @@
+[gd_scene load_steps=4 format=3 uid="uid://18gep5jcxdf6"]
+
+[ext_resource type="Material" uid="uid://t1rgbwnt81r1" path="res://matrials/GreenPlainT.tres" id="1_08630"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ykrsh"]
+
+[sub_resource type="TextMesh" id="TextMesh_vbegm"]
+text = "Rad 3"
+
+[node name="VehicleBody3D" type="VehicleBody3D"]
+visible = false
+mass = 10.0
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_ykrsh")
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="DirectionalLight3D" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 2, 1)
+light_color = Color(0.0666666, 0, 1, 1)
+light_energy = 10.0
+spot_range = 1.7
+
+[node name="DirectionalLight3D4" type="SpotLight3D" parent="."]
+transform = Transform3D(-0.5, 0.433013, 0.75, -0.866025, -0.25, -0.433013, 0, -0.866025, 0.5, 0, 2, 1)
+light_color = Color(0.0666666, 0, 1, 1)
+light_energy = 10.0
+spot_range = 1.7
+
+[node name="VehicleWheel3D" type="VehicleWheel3D" parent="."]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, 0, -1, 2)
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="VehicleWheel3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.965926, 0, 0.258819)
+use_collision = true
+
+[node name="DirectionalLight3D3" type="SpotLight3D" parent="VehicleWheel3D"]
+transform = Transform3D(-0.965926, 0.224144, -0.12941, 0, 0.5, 0.866025, 0.258819, 0.836516, -0.482963, 0.258819, 3, 0.965926)
+light_color = Color(0.0666666, 0, 1, 1)
+light_energy = 10.0
+spot_range = 1.7
+
+[node name="VehicleWheel3D2" type="VehicleWheel3D" parent="."]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, -1, -1, 1)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="VehicleWheel3D2"]
+transform = Transform3D(2.15333, 0, 1.19209e-07, 0, -0.5, 0, 2.38419e-07, 0, 3.22812, 0, -0.35, 0.7)
+use_collision = true
+size = Vector3(1, 0.3, 2.4)
+
+[node name="DirectionalLight3D2" type="SpotLight3D" parent="VehicleWheel3D2"]
+transform = Transform3D(-0.965926, 0.224144, -0.12941, 0, 0.5, 0.866025, 0.258819, 0.836516, -0.482963, -15.4548, 3, 4.14111)
+light_color = Color(1, 0, 0.0166664, 1)
+light_energy = 0.427
+light_indirect_energy = 0.0
+spot_range = 152.585
+spot_attenuation = -1.56
+spot_angle = 20.66
+
+[node name="VehicleWheel3D3" type="VehicleWheel3D" parent="."]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, 0, -1, 0)
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="VehicleWheel3D3"]
+transform = Transform3D(3.53643, 0, 2.38419e-07, 0, 1, 0, 0, 0, 10.4661, 0, 0, 0)
+use_collision = true
+mesh = SubResource("TextMesh_vbegm")
+material = ExtResource("1_08630")
+
+[node name="DirectionalLight3D5" type="SpotLight3D" parent="VehicleWheel3D3"]
+transform = Transform3D(-0.965926, 0.0669873, 0.25, 0, -0.965926, 0.258819, 0.258819, 0.25, 0.933013, -0.258819, 2, -0.965926)
+light_color = Color(0.116667, 1, 0, 1)
+light_energy = 10.155
+light_indirect_energy = 2.426
+spot_range = 71.0
+spot_attenuation = -2.05
+spot_angle = 1.3
+
+[node name="VehicleBody3D" type="VehicleBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23, -1, -10)
+mass = 10.0
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VehicleBody3D"]
+shape = SubResource("SphereShape3D_ykrsh")
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="VehicleBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="DirectionalLight3D" type="SpotLight3D" parent="VehicleBody3D"]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 2, 1)
+light_color = Color(0.0666666, 0, 1, 1)
+light_energy = 10.0
+spot_range = 1.7
+
+[node name="DirectionalLight3D4" type="SpotLight3D" parent="VehicleBody3D"]
+transform = Transform3D(-0.5, 0.433013, 0.75, -0.866025, -0.25, -0.433013, 0, -0.866025, 0.5, 0, 2, 1)
+light_color = Color(0.0666666, 0, 1, 1)
+light_energy = 10.0
+spot_range = 1.7
+
+[node name="VehicleWheel3D" type="VehicleWheel3D" parent="VehicleBody3D"]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, 0, -1, 2)
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="VehicleBody3D/VehicleWheel3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.965926, 0, 0.258819)
+use_collision = true
+
+[node name="DirectionalLight3D3" type="SpotLight3D" parent="VehicleBody3D/VehicleWheel3D"]
+transform = Transform3D(-0.965926, 0.224144, -0.12941, 0, 0.5, 0.866025, 0.258819, 0.836516, -0.482963, 0.258819, 3, 0.965926)
+light_color = Color(0.0666666, 0, 1, 1)
+light_energy = 10.0
+spot_range = 1.7
+
+[node name="VehicleWheel3D2" type="VehicleWheel3D" parent="VehicleBody3D"]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, -1, -1, 1)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="VehicleBody3D/VehicleWheel3D2"]
+transform = Transform3D(2.15333, 0, 1.19209e-07, 0, -0.5, 0, 2.38419e-07, 0, 3.22812, 0, -0.35, 0.7)
+use_collision = true
+size = Vector3(1, 0.3, 2.4)
+
+[node name="DirectionalLight3D2" type="SpotLight3D" parent="VehicleBody3D/VehicleWheel3D2"]
+transform = Transform3D(-0.965926, 0.224144, -0.12941, 0, 0.5, 0.866025, 0.258819, 0.836516, -0.482963, -15.4548, 3, 4.14111)
+light_color = Color(1, 0, 0.0166664, 1)
+light_energy = 0.427
+light_indirect_energy = 0.0
+spot_range = 152.585
+spot_attenuation = -1.56
+spot_angle = 20.66
+
+[node name="VehicleWheel3D3" type="VehicleWheel3D" parent="VehicleBody3D"]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, 0, -1, 0)
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="VehicleBody3D/VehicleWheel3D3"]
+transform = Transform3D(3.53643, 0, 2.38419e-07, 0, 1, 0, 0, 0, 10.4661, 0, 0, 0)
+use_collision = true
+mesh = SubResource("TextMesh_vbegm")
+material = ExtResource("1_08630")
+
+[node name="DirectionalLight3D5" type="SpotLight3D" parent="VehicleBody3D/VehicleWheel3D3"]
+transform = Transform3D(-0.965926, 0.0669873, 0.25, 0, -0.965926, 0.258819, 0.258819, 0.25, 0.933013, -0.258819, 2, -0.965926)
+light_color = Color(0.116667, 1, 0, 1)
+light_energy = 10.155
+light_indirect_energy = 2.426
+spot_range = 71.0
+spot_attenuation = -2.05
+spot_angle = 1.3
+
+[node name="VehicleBody3D2" type="VehicleBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23, -1, -10)
+mass = 10.0
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VehicleBody3D2"]
+shape = SubResource("SphereShape3D_ykrsh")
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="VehicleBody3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="DirectionalLight3D" type="SpotLight3D" parent="VehicleBody3D2"]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 2, 1)
+light_color = Color(0.0666666, 0, 1, 1)
+light_energy = 10.0
+spot_range = 1.7
+
+[node name="DirectionalLight3D4" type="SpotLight3D" parent="VehicleBody3D2"]
+transform = Transform3D(-0.5, 0.433013, 0.75, -0.866025, -0.25, -0.433013, 0, -0.866025, 0.5, 0, 2, 1)
+light_color = Color(0.0666666, 0, 1, 1)
+light_energy = 10.0
+spot_range = 1.7
+
+[node name="VehicleWheel3D" type="VehicleWheel3D" parent="VehicleBody3D2"]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, 0, -1, 2)
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="VehicleBody3D2/VehicleWheel3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.965926, 0, 0.258819)
+use_collision = true
+
+[node name="DirectionalLight3D3" type="SpotLight3D" parent="VehicleBody3D2/VehicleWheel3D"]
+transform = Transform3D(-0.965926, 0.224144, -0.12941, 0, 0.5, 0.866025, 0.258819, 0.836516, -0.482963, 0.258819, 3, 0.965926)
+light_color = Color(0.0666666, 0, 1, 1)
+light_energy = 10.0
+spot_range = 1.7
+
+[node name="VehicleWheel3D2" type="VehicleWheel3D" parent="VehicleBody3D2"]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, -1, -1, 1)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="VehicleBody3D2/VehicleWheel3D2"]
+transform = Transform3D(2.15333, 0, 1.19209e-07, 0, -0.5, 0, 2.38419e-07, 0, 3.22812, 0, -0.35, 0.7)
+use_collision = true
+size = Vector3(1, 0.3, 2.4)
+
+[node name="DirectionalLight3D2" type="SpotLight3D" parent="VehicleBody3D2/VehicleWheel3D2"]
+transform = Transform3D(-0.965926, 0.224144, -0.12941, 0, 0.5, 0.866025, 0.258819, 0.836516, -0.482963, -15.4548, 3, 4.14111)
+light_color = Color(1, 0, 0.0166664, 1)
+light_energy = 0.427
+light_indirect_energy = 0.0
+spot_range = 152.585
+spot_attenuation = -1.56
+spot_angle = 20.66
+
+[node name="VehicleWheel3D3" type="VehicleWheel3D" parent="VehicleBody3D2"]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, 0, -1, 0)
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="VehicleBody3D2/VehicleWheel3D3"]
+transform = Transform3D(3.53643, 0, 2.38419e-07, 0, 1, 0, 0, 0, 10.4661, 0, 0, 0)
+use_collision = true
+mesh = SubResource("TextMesh_vbegm")
+material = ExtResource("1_08630")
+
+[node name="DirectionalLight3D5" type="SpotLight3D" parent="VehicleBody3D2/VehicleWheel3D3"]
+transform = Transform3D(-0.965926, 0.0669873, 0.25, 0, -0.965926, 0.258819, 0.258819, 0.25, 0.933013, -0.258819, 2, -0.965926)
+light_color = Color(0.116667, 1, 0, 1)
+light_energy = 10.155
+light_indirect_energy = 2.426
+spot_range = 71.0
+spot_attenuation = -2.05
+spot_angle = 1.3
+
+[node name="VehicleBody3D3" type="VehicleBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23, -1, -10)
+mass = 10.0
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VehicleBody3D3"]
+shape = SubResource("SphereShape3D_ykrsh")
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="VehicleBody3D3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="DirectionalLight3D" type="SpotLight3D" parent="VehicleBody3D3"]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 2, 1)
+light_color = Color(0.0666666, 0, 1, 1)
+light_energy = 10.0
+spot_range = 1.7
+
+[node name="DirectionalLight3D4" type="SpotLight3D" parent="VehicleBody3D3"]
+transform = Transform3D(-0.5, 0.433013, 0.75, -0.866025, -0.25, -0.433013, 0, -0.866025, 0.5, 0, 2, 1)
+light_color = Color(0.0666666, 0, 1, 1)
+light_energy = 10.0
+spot_range = 1.7
+
+[node name="VehicleWheel3D" type="VehicleWheel3D" parent="VehicleBody3D3"]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, 0, -1, 2)
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="VehicleBody3D3/VehicleWheel3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.965926, 0, 0.258819)
+use_collision = true
+
+[node name="DirectionalLight3D3" type="SpotLight3D" parent="VehicleBody3D3/VehicleWheel3D"]
+transform = Transform3D(-0.965926, 0.224144, -0.12941, 0, 0.5, 0.866025, 0.258819, 0.836516, -0.482963, 0.258819, 3, 0.965926)
+light_color = Color(0.0666666, 0, 1, 1)
+light_energy = 10.0
+spot_range = 1.7
+
+[node name="VehicleWheel3D2" type="VehicleWheel3D" parent="VehicleBody3D3"]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, -1, -1, 1)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="VehicleBody3D3/VehicleWheel3D2"]
+transform = Transform3D(2.15333, 0, 1.19209e-07, 0, -0.5, 0, 2.38419e-07, 0, 3.22812, 0, -0.35, 0.7)
+use_collision = true
+size = Vector3(1, 0.3, 2.4)
+
+[node name="DirectionalLight3D2" type="SpotLight3D" parent="VehicleBody3D3/VehicleWheel3D2"]
+transform = Transform3D(-0.965926, 0.224144, -0.12941, 0, 0.5, 0.866025, 0.258819, 0.836516, -0.482963, -15.4548, 3, 4.14111)
+light_color = Color(1, 0, 0.0166664, 1)
+light_energy = 0.427
+light_indirect_energy = 0.0
+spot_range = 152.585
+spot_attenuation = -1.56
+spot_angle = 20.66
+
+[node name="VehicleWheel3D3" type="VehicleWheel3D" parent="VehicleBody3D3"]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, 0, -1, 0)
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="VehicleBody3D3/VehicleWheel3D3"]
+transform = Transform3D(3.53643, 0, 2.38419e-07, 0, 1, 0, 0, 0, 10.4661, 0, 0, 0)
+use_collision = true
+mesh = SubResource("TextMesh_vbegm")
+material = ExtResource("1_08630")
+
+[node name="DirectionalLight3D5" type="SpotLight3D" parent="VehicleBody3D3/VehicleWheel3D3"]
+transform = Transform3D(-0.965926, 0.0669873, 0.25, 0, -0.965926, 0.258819, 0.258819, 0.25, 0.933013, -0.258819, 2, -0.965926)
+light_color = Color(0.116667, 1, 0, 1)
+light_energy = 10.155
+light_indirect_energy = 2.426
+spot_range = 71.0
+spot_attenuation = -2.05
+spot_angle = 1.3
+
+[node name="VehicleBody3D4" type="VehicleBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23, -1, -10)
+mass = 10.0
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VehicleBody3D4"]
+shape = SubResource("SphereShape3D_ykrsh")
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="VehicleBody3D4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="DirectionalLight3D" type="SpotLight3D" parent="VehicleBody3D4"]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 2, 1)
+light_color = Color(0.0666666, 0, 1, 1)
+light_energy = 10.0
+spot_range = 1.7
+
+[node name="DirectionalLight3D4" type="SpotLight3D" parent="VehicleBody3D4"]
+transform = Transform3D(-0.5, 0.433013, 0.75, -0.866025, -0.25, -0.433013, 0, -0.866025, 0.5, 0, 2, 1)
+light_color = Color(0.0666666, 0, 1, 1)
+light_energy = 10.0
+spot_range = 1.7
+
+[node name="VehicleWheel3D" type="VehicleWheel3D" parent="VehicleBody3D4"]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, 0, -1, 2)
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="VehicleBody3D4/VehicleWheel3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.965926, 0, 0.258819)
+use_collision = true
+
+[node name="DirectionalLight3D3" type="SpotLight3D" parent="VehicleBody3D4/VehicleWheel3D"]
+transform = Transform3D(-0.965926, 0.224144, -0.12941, 0, 0.5, 0.866025, 0.258819, 0.836516, -0.482963, 0.258819, 3, 0.965926)
+light_color = Color(0.0666666, 0, 1, 1)
+light_energy = 10.0
+spot_range = 1.7
+
+[node name="VehicleWheel3D2" type="VehicleWheel3D" parent="VehicleBody3D4"]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, -1, -1, 1)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="VehicleBody3D4/VehicleWheel3D2"]
+transform = Transform3D(2.15333, 0, 1.19209e-07, 0, -0.5, 0, 2.38419e-07, 0, 3.22812, 0, -0.35, 0.7)
+use_collision = true
+size = Vector3(1, 0.3, 2.4)
+
+[node name="DirectionalLight3D2" type="SpotLight3D" parent="VehicleBody3D4/VehicleWheel3D2"]
+transform = Transform3D(-0.965926, 0.224144, -0.12941, 0, 0.5, 0.866025, 0.258819, 0.836516, -0.482963, -15.4548, 3, 4.14111)
+light_color = Color(1, 0, 0.0166664, 1)
+light_energy = 0.427
+light_indirect_energy = 0.0
+spot_range = 152.585
+spot_attenuation = -1.56
+spot_angle = 20.66
+
+[node name="VehicleWheel3D3" type="VehicleWheel3D" parent="VehicleBody3D4"]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, 0, -1, 0)
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="VehicleBody3D4/VehicleWheel3D3"]
+transform = Transform3D(3.53643, 0, 2.38419e-07, 0, 1, 0, 0, 0, 10.4661, 0, 0, 0)
+use_collision = true
+mesh = SubResource("TextMesh_vbegm")
+material = ExtResource("1_08630")
+
+[node name="DirectionalLight3D5" type="SpotLight3D" parent="VehicleBody3D4/VehicleWheel3D3"]
+transform = Transform3D(-0.965926, 0.0669873, 0.25, 0, -0.965926, 0.258819, 0.258819, 0.25, 0.933013, -0.258819, 2, -0.965926)
+light_color = Color(0.116667, 1, 0, 1)
+light_energy = 10.155
+light_indirect_energy = 2.426
+spot_range = 71.0
+spot_attenuation = -2.05
+spot_angle = 1.3
