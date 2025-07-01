@@ -19,6 +19,7 @@ public partial class Player : CharacterBody3D
 	[Export] public Curve AccelCurve;
 	[Export] public Curve DecelCurve;
 	[Export] public Curve CounterAccelFactor;
+	[Export(PropertyHint.Range, "0, 1")] public float VelocityRedirection = 0.2f;
 	//[Export] public Curve AirResistanceCofactor;
 	[ExportSubgroup("Nodes")]
 	[Export] public Timer DashTimer; 
@@ -165,9 +166,25 @@ public partial class Player : CharacterBody3D
 		//velocity += acceleration * new Vector3((float)delta, (float)delta, (float)delta);
 		//vGD.Print(acceleration);
 		
-		Vector3 velocityXZ = new Vector3(velocity.X, 0, velocity.Z);
+		// Determine values
 		float actingSpeed = (Input.IsActionPressed("move_sprint") ? SprintSpeed : Speed); // extend with ground speed for decel on floor
 		float actingDecelSpeed = !IsOnFloor() ? AirDecelSpeed : DecelSpeed;
+		Vector3 velocityXZ = new Vector3(velocity.X, 0, velocity.Z);
+		
+		// Calculate redirection
+		//float theta = Mathf.Acos(new Vector2(velocity.X, velocity.Z).Normalized().Dot(new Vector2(smoothedDirection.X, smoothedDirection.Z).Normalized()));
+		
+		//Vector2 v1 = new Vector2(velocity.X, velocity.Z).Normalized();
+		//Vector2 v2 = new Vector2(smoothedDirection.X, smoothedDirection.Z).Normalized();
+		//float theta = Mathf.Atan2(v1.X * v2.Y - v1.Y * v2.X, v1.Dot(v2));
+		float theta = new Vector3(velocity.X, 0, velocity.Z).Normalized().AngleTo(new Vector3(smoothedDirection.X, 0, smoothedDirection.Z).Normalized());
+		GD.Print(theta);
+		Vector3 redirectedVelocity = smoothedDirection * velocityXZ.Length();
+		//velocity = redirectedVelocity;
+		redirectedVelocity.Y = velocity.Y;
+		velocity = velocity.Lerp(redirectedVelocity, VelocityRedirection);
+		
+		velocityXZ = new Vector3(velocity.X, 0, velocity.Z);
 		
 		// Calculate deceleration force
 		float decelStrength = DecelCurve.SampleBaked(velocityXZ.Length()/actingSpeed);
@@ -204,6 +221,8 @@ public partial class Player : CharacterBody3D
 				}
 			}
 			velocity += acceleration;
+			velocityXZ = new Vector3(velocity.X, 0, velocity.Z);
+			
 			
 			// Calclate deceleration
 			Vector2 v = new Vector2(velocity.X, velocity.Z).Normalized();
@@ -220,6 +239,8 @@ public partial class Player : CharacterBody3D
 			//d = d.Rotated(Vector3.Up, avAngle);
 			
 			velocity -= d;
+			
+			
 			
 			velocityXZ = new Vector3(velocity.X, 0, velocity.Z);
 			

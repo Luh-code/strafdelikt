@@ -11,8 +11,8 @@
 [ext_resource type="Shader" uid="uid://d1fpwoj1468qm" path="res://entities/scripts/player/shader/psx.gdshader" id="9_bectd"]
 
 [sub_resource type="Curve" id="Curve_8fjmc"]
-_limits = [0.0, 2.0, 0.0, 1.0]
-_data = [Vector2(0, 2), 0.0, 0.0, 0, 0, Vector2(0.254945, 1.00664), 0.0, 0.0, 0, 0]
+_limits = [0.0, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 3), 0.0, 0.0, 0, 0, Vector2(0.182418, 1.00664), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_sglur"]
@@ -101,13 +101,14 @@ SprintSpeed = 13.5
 JumpVelocity = 15.05
 JumpSpeedBoost = 4.415
 AccelSpeed = 91.41
-DecelSpeed = 57.765
-AirDecelSpeed = 12.918
+DecelSpeed = 74.63
+AirDecelSpeed = 19.218
 LateralCofactor = 3.005
 DashVelocity = 24.843
 AccelCurve = SubResource("Curve_8fjmc")
 DecelCurve = SubResource("Curve_sglur")
 CounterAccelFactor = SubResource("Curve_qiwj3")
+VelocityRedirection = 0.07
 DashTimer = NodePath("DashTimer")
 debugUI = NodePath("DebugUI")
 VArm = NodePath("DebugUI/DirectionClockWidget/Arms/VArm")
