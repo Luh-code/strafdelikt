@@ -1654,3 +1654,9 @@ omni_range = 10.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("4_ppyta")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 6, 0)
+light_color = Color(0.665436, 0.560869, 0.505323, 1)
+light_energy = 0.13
+light_indirect_energy = 3.52
