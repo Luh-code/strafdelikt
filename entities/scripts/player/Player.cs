@@ -31,10 +31,6 @@ public partial class Player : CharacterBody3D
 	[Export] public Node2D DArm;
 	[Export] public Node2D AArm;
 	[Export] public Node2D MArm;
-	//[Export] public Curve AccelJerk;
-	//[Export] public float AccelTime = 2.0f;
-	//[Export] public Curve DecelJerk;
-	//[Export] public float DecelTime = 1.0f;
 
 	Node3D playerModel;
 	public PlayerCamera firstPersonCamera;
@@ -119,9 +115,9 @@ public partial class Player : CharacterBody3D
 		float actingDecelSpeed = !IsOnFloor() ? AirDecelSpeed : DecelSpeed;
 		Vector3 velocityXZ = new Vector3(velocity.X, 0, velocity.Z);
 		
-		// Calculate redirectionized();
+		// Calculate redirection
 		float theta = new Vector3(velocity.X, 0, velocity.Z).Normalized().AngleTo(new Vector3(smoothedDirection.X, 0, smoothedDirection.Z).Normalized());
-		GD.Print(theta);
+		// GD.Print(theta);
 		Vector3 redirectedVelocity = smoothedDirection * velocityXZ.Length();
 		redirectedVelocity.Y = velocity.Y;
 		velocity = velocity.Lerp(redirectedVelocity, VelocityRedirection);
@@ -136,7 +132,7 @@ public partial class Player : CharacterBody3D
 			deceleration = velocityXZ.Length();
 		}
 		
-		if (movementDirection != Vector3.Zero && !firstPersonCamera.debug)// && velocity.Length() < Speed)
+		if (movementDirection != Vector3.Zero && !firstPersonCamera.debug)
 		{
 			// Accelerate
 			float accelStrength = AccelCurve.SampleBaked(velocityXZ.Length()/actingSpeed);
@@ -144,7 +140,6 @@ public partial class Player : CharacterBody3D
 			Vector3 acceleration = (smoothedDirection * accelStrength * AccelSpeed * (float) delta);
 			if ((velocityXZ + acceleration).Length() > actingSpeed)
 			{
-				//acceleration = Vector3.Zero;
 				if (velocityXZ.Length() > actingSpeed) {
 					acceleration = Vector3.Zero;
 				}
